@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>Cart Purchase</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>Insert title here</title>
+<style type="text/css">
+	.cartItems{
+		border:1px dashed gray;
+		margin: auto;
+		width: 200px;
+		text-align:center;
+	}
+
+	.borderdiv{
+/* 		border:1px solid black; */
+		margin: auto;
+		width: 250px;
+		text-align:center;
+		overflow:auto;
+	}
+
+	.buyer{
+		border:1px solid black;
+		margin: auto;
+		width: 250px;
+		text-align:center;
+	}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var total;
+	for (var i = 0; i < 2; i++) {
+		total = total + $("#total").val($("#subTotal").val());
+	}
+
+	$("#buy").click(function(){
+		if($("#cardNo").val() != "" && 	$("#address").val() != "" &&
+		   $("#cardType").val() != "" && $("#expDate").val() != ""){
+			alert("Thank you!!");
+		}else{
+			alert("Please fill out the form");
+		}
+	});
+
+});
+</script>
+</head>
+<body>
+<form action="cartPurchase.do" method="post">
+<div class="container">
+	<span></span>
+	<div class="borderdiv">
+	<h2>CheckOut</h2>
+		<div class="cartItems" name="cartItems">
+			<c:forEach var="c" items="${buyList}" >
+				<label for="itemNo">itemNo:<input type="hidden" name="itemNo" value="${c.itemNo }"> ${c.itemNo }</label><br>
+				<p>itemName: ${c.itemName}</p>
+				<p id="price">Price($): ${c.price}</p>
+				<p id="quantity">quantity: ${c.quantity }</p>
+				sub-total: <b id="subTotal">${(c.price)*(c.quantity) }</b>
+				<p>------------------------------------------</p>
+			</c:forEach>
+		</div>
+		<h2 name="totalhere" id="totalhere"><strong>Total: $ ${totalPrice }</strong></h2><br>
+	</div>
+		<div class="buyer">
+			<h3>Buyer Info
+			<span name="mid">id: ${mid }</span></h3>
+			<p><input type="text" name="address" id ="address" required placeholder="address"></p>
+			<p><input type="text" name="cardNo" id ="cardNo" required placeholder="xxxx-xxxx-xxxx-xxxx"></p>
+			<p>	CardType:
+				<select required id="cardType" name="cardType">
+					<option value="Master">Master</option>
+					<option value="VISA">VISA</option>
+					<option value="Other">Other</option>
+				</select>
+			</p><p><input type="text" id="expDate" name="expDate" required placeholder="MM/YY"></p>
+			<input type="submit" id="buy" value="buy!" class="btn btn-success">
+			<a href="mallMain.do" class="btn btn-default">back</a>
+		</div><span></span><br>
+	</div>
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+  <body>
+    <div class="container">
+      <h1><a href="../" class="glyphicon glyphicon-home lg" ></a> You sik Jeon</h1><br /><br />
+      <% if(user){ %>
+      <h3>welcome <b> <%=user.username%> </b>!</h3>
+      <h3> <b>Level: <%=user.level%> </b></h3>
+      <% }%>
+      <% if(!user){ %>
+      <h3>welcome <b> guest </b>!</h3>
+      <% }%>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/about">About</a></li>
+            <li><a href="/work">Work</a></li>
+            <!-- temp...should update with modal1 -->
+            <li><a href="#" data-target="#modal2" data-toggle="modal"><span>Contact Info</span></a></li>
+            <!-- make a modal to e-mail? -->
+            <!-- <li><a href="#" data-target="#modal1" data-toggle="modal"><span>Contact</span></a></li> -->
+          </ul>
+      </div>
+    </nav>
+
+
+    <!-- Modal: email(TBU) -->
+    <div id="modal1" class="modal">
+         <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button class="close" data-dismiss="modal">x</button>
+                  <h4>Contact Me</h4>
+               </div>
+               <div class="modal-body">
+             <form action="../about/mail" method="post">
+               <input type="text" class="form-control" name="contactFrom" placeholder="Your e-mail" id="contact" value="" required/><br>
+               <textarea rows=10 cols=35 class="form-control" placeholder="text" name="contactText"></textarea>
+               <h5>This goes to my e-mail...<br /><b>andrewskej@gmail.com</b><br />Thank you!</h5>
+               <input type="submit" class="btn btn-success" value="send"></button>
+             </form><br>
+              </div>
+           </div>
+        </div>
+     </div>
+
+    <!-- Modal2 : contact info -->
+     <div id="modal2" class="modal">
+          <div class="modal-dialog modal-sm">
+             <div class="modal-content">
+                <div class="modal-header">
+                   <button class="close" data-dismiss="modal">x</button>
+                   <h4>Contact Info</h4>
+                </div>
+                <div class="modal-body">
+                <input type="text" class="form-control"   value="andrewskej@gmail.com" readonly/><br>
+                <input type="text" class="form-control"   value="+82-10-3386-7996" readonly/><br>
+                <input type="text" class="form-control"   value="Place of residence: Seoul, Korea" readonly/><br>
+                <input type="text" class="form-control"   value="Willing to Relocate" readonly/><br>
+                <input type="text" class="form-control"   value="Notice period: 3 weeks or shorter" readonly/><br>
+                <input type="text" class="form-control"   value="linkedin" readonly/><br>
+                <input type="text" class="form-control"   value="github" readonly/><br>
+                <h5>Thank you!</h5>
+               </div>
+            </div>
+         </div>
+      </div>
+
+<p>
+  <br />
+  This website is a portfolio of   You sik Jeon<br />
+  to show some junior level <b>back-end</b> web development work.<br />
+  My Major developing skill sets are composed of:  <br />
+  <br />
+  <ul>
+    <li>
+      Java-JSP-Spring-Oracle
+    </li>
+    <li>
+       Node.js-Express-mySQL-mongoDB
+    </li>
+  </ul>
+  <br />
+  This website is created using node.js, express, ejs, jQuery, and mysql.<br/>
+  Though some codes may not be in the most optimized form, it is constantly being improved on daily basis.<br />
+  Thank you!
+</p><br />
+<a class="btn btn-success" href="public/docs/Yousik_Jeon_CV.pdf" download>official CV download</a>
+
+<br /><br />
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>My Shopping List</title>
+<style type="text/css">
+	.shoppinglist{
+	overflow:scroll;
+	}
+	.eachItem{
+	border: 1px solid black;
+	}
+</style>
+</head>
+<body>
+
+<div class="container">
+ 	<div id="accordion" class="panel-group">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h4 class="panel-title">
+            	<h3>${mid } 's shopping List</h3>
+                  <a data-parent="#accordion" href="#collapse1" data-toggle="collapse">View all my Shopping List</a>
+               </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+               <div class="shoppinglist"><br>
+                  <c:forEach var="o" items="${oList }">
+                    <div class="eachItem">
+	                    <p>itemNo: 		${o.itemNo } </p>
+	                    <p><img src = "upload/${o.itemImg}" style="width:300px;"></p>
+						<p>itemName:	${o.itemName } </p>
+						<p>price:    	${o.price }</p>
+						<p>address:		${o.address } </p>
+						<p>orderNo:		${o.orderNo}  </p>
+						<p>orderDate:	${o.orderDate } </p>
+						<p>Status:		${o.status}  </p>
+					</div>
+                  </c:forEach>
+                  <br>
+               </div>
+            </div>
+         </div>
+	</div>
+	<a href="mallMain.do"><button class="btn btn-default">Back</button></a>
+</div>
+</body>
+</html>

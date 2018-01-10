@@ -1,0 +1,161 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+<div class="container">
+  <h1><a href="../" class="glyphicon glyphicon-home lg" ></a>  You sik Jeon</h1><br /><br />
+
+  <% if(user){ %>
+  <h3>welcome <b> <%=user.username%> </b>!</h3>
+  <h3> <b>Level: <%=user.level%> </b></h3>
+  <% }%>
+  <% if(!user){ %>
+  <h3>welcome <b> guest </b>!</h3>
+  <% }%>
+
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+          <li><a href="/about">About</a></li>
+          <li class="active"><a href="">Work</a></li>
+          <!-- make a modal to e-mail? -->
+          <!-- <li><a href="#" data-target="#modal1" data-toggle="modal"><span>Contact</span></a></li> -->
+        </ul>
+    </div>
+  </nav>
+
+
+     <!-- Modal : to be updated -->
+     <div id="modal1" class="modal">
+          <div class="modal-dialog modal-sm">
+             <div class="modal-content">
+                <div class="modal-header">
+                   <button class="close" data-dismiss="modal">x</button>
+                   <h4>Contact Me</h4>
+                </div>
+                <div class="modal-body">
+              <form id="loginform" action="mallLogin.do" method="get">
+                <input type="text" class="form-control" name="contactAddress" placeholder="Your e-mail" id="contact" value="" required/><br>
+                <textarea rows=10 cols=35 class="form-control" placeholder="text" name="contactText"></textarea>
+                <h5>This goes to my e-mail...<br /><b>andrewskej@gmail.com</b><br />Thank you!</h5>
+              </form><br>
+                <input type="submit" class="btn btn-success" value="send"></button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div id="modal2" class="modal">
+           <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                 <div class="modal-header">
+                    <button class="close" data-dismiss="modal">x</button>
+                    <h4>Mall</h4>
+                 </div>
+                 <div class="modal-body">
+               <textarea rows=10 cols=35 class="form-control" readonly>A Mall simulator using CRUD.
+Admin mode available.
+Originally built with
+Java-JSP-Spring-Oracle sets, and
+currently being refactored in Node.js. </textarea>
+                </div>
+             </div>
+          </div>
+       </div>
+
+       <div id="modal3" class="modal">
+            <div class="modal-dialog modal-sm">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button class="close" data-dismiss="modal">x</button>
+                     <h4>Board</h4>
+                  </div>
+                  <div class="modal-body">
+                  <textarea rows=10 cols=35 class="form-control" readonly>A simple board where you can CRUD </textarea>
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        <div id="modal4" class="modal">
+             <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                   <div class="modal-header">
+                      <button class="close" data-dismiss="modal">x</button>
+                      <h4>Chat</h4>
+                   </div>
+                   <div class="modal-body">
+                   <textarea rows=10 cols=35 class="form-control" readonly>A casual chatroom using socket.io.
+As it does not involve database, chat log is not stored.</textarea>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+
+    <div class="row" style="float:left; width:25%;">
+      <div class="col-sm-6 col-md-2">
+        <div class="thumbnail" style="width:200px" >
+          <div class="caption">
+            <h3><span class="glyphicon glyphicon-shopping-cart lg"></span></h3>
+            <h3>Mall</h3>
+            <p>A Mall Simulator</p>
+            <p><a href="../work/mall" target="_blank" class="btn btn-primary" role="button">Test</a>
+            <a href="#" data-target="#modal2" data-toggle="modal" class="btn btn-default" role="button">Info</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="float:left; width:25%;">
+      <div class="col-sm-6 col-md-2">
+        <div class="thumbnail" style="width:200px" >
+          <div class="caption">
+            <h3><span class="glyphicon glyphicon-list-alt lg"></span></h3>
+            <h3>Board</h3>
+            <p>A Board with basic CRUD</p>
+            <p><a href="../work/board" target="_blank" class="btn btn-primary" role="button">Test</a>
+              <a href="#" data-target="#modal3" data-toggle="modal" class="btn btn-default" role="button">Info</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="float:left; width:25%;">
+      <div class="col-sm-6 col-md-2">
+        <div class="thumbnail" style="width:200px" >
+          <div class="caption">
+            <h3><span class="glyphicon glyphicon-user lg"></span></h3>
+            <h3>Chat</h3>
+            <p>A socket.io Chatroom</p>
+            <p><a href="../work/chat" target="_blank" class="btn btn-primary" role="button">Test</a>
+              <a href="#" data-target="#modal4" data-toggle="modal" class="btn btn-default" role="button">Info</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="float:left; width:25%;">
+      <div class="col-sm-6 col-md-2">
+        <div class="thumbnail" style="width:200px" >
+          <div class="caption">
+            <h3><span class="glyphicon glyphicon-usd lg"></span></h3>
+            <h3>Bank</h3>
+            <p>--Under Construction--</p>
+            <p><a href="#" target="_blank" class="btn btn-primary" role="button" disabled>Test</a>
+            <a href="/work/a" target="_blank" class="btn btn-default" role="button" >Instead</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+</div>
+  </body>
+</html>

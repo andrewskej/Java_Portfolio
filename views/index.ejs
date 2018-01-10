@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>You sik Jeon Portfolio</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<%if(!username){%>
+      <h1>You sik Jeon</h1><br /><br />
+      <form action="auth/login" method="post">
+        <p>Member Login</p>
+        <input type='text' name="username" placeholder="username" /><br />
+        <input type="password" name="password" placeholder="password" />
+        <input type="submit" class="btn btn-success" value="Login" />
+      </form>
+      <p>Not a member?</p>
+        <a href="auth/register"><input type="button" class="btn btn-default" value="register" /></a>
+        <a href="/about"><input type="button" class="btn btn-danger" value="continue as a guest"/></a>
+        <br /><br />
+
+        <h4>Test account:</h4>
+        <ul>
+          <ol>
+            <b>(Level: user)</b><br />
+            username: tester <br />
+            password: 1234
+          </ol><br />
+          <ol>
+            <b>(Level: Admin)</b><br />
+            username: admin <br />
+            password: 1234
+          </ol>
+        </ul>
+<%}%>
+<%if(username){%>
+      <h3>Logged in as: <%=username%></h3><br />
+      <a href="/logout"><input type="button" class="btn btn-danger" value="logout" /></a>
+      <a href="/about"><input type="button" class="btn btn-success" value="continue"/></a>
+<%}%>
+</div>
+</body>
+</html>

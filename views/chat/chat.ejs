@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>Chat Practice</title>
+<meta charset='utf-8'/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+  .chatLog{ width: 95%; height: 400px; }
+  .name{ width: 10%; }
+  .message{ width: 50%; }
+  .chat{ width: 10%; }
+</style>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io.connect();
+$(document).ready(function(){
+
+  $('form').submit(function(event){
+    socket.emit('sendMSG', $('#name').val(),$('#message').val());
+    $('#message').val("");
+    $('#message').focus();
+    event.preventDefault();
+    });
+
+    socket.on('sendMSG',function(msg){
+      $('#chatLog').append(msg);
+    });
+
+
+ //Event: get conncted user count
+    socket.on('socket_evt_chat_user',function(data){
+      data = JSON.parse(data);
+      userCnt = data.length;
+      $('#userCnt').html(userCnt);
+    });
+
+  //Event: get connection log
+    socket.on('socket_evt_logs',function(data){
+      data = JSON.parse(data);
+      //empty log to refill
+      $('#chat_logs').empty();
+      for(var i=0;i<data.length;i++){
+        $('#chat_logs').append('<li>'+data[i].log+'('+data[i].date+')'+'</li>');
+      }
+      $('.chat_history_list').scrollTop($('#chat_logs').height());
+    });
+    chat_user();
+  });
+
+  function chat_user(){
+      socket.emit('chat_user','{"channel":workspace"}');
+    }
+
+    socket.on('leave',function(){
+      var leftmsg = "---A user has Left---\n";
+        $('#chatLog').append(leftmsg);
+    });
+
+</script>
+</head>
+<body>
+<div class="container">
+  <h1>ChatRoom</h1>
+  <div>
+    <textarea id="chatLog" class="chatLog" readonly></textarea>
+  </div>
+  <div>
+    <form id="chat">
+      <input type="text" id="name" class="name" value="<%=user.username%>" />
+      <input type="text" id="message" class="message" placeholder="enter your message here"/>
+      <input type="submit" class="chat" value="chat" />
+    </form>
+  </div>
+</div>
+</body>
+</html>

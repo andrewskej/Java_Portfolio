@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Board</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<body>
+
+<div class="container">
+<h1><%= title %> Board</h1>
+<h3>Username: <%=user.username%></h3>
+<h3>Level:   <%=user.level%></h3>
+
+<table border="2" class="table table-hover">
+    <tr>
+        <td><b>SEQ</b></td>
+        <td><b>Writer</b></td>
+        <td><b>Title</b></td>
+        <td><b>Hit</b></td>
+        <td><b>RegDate</b></td>
+    </tr>
+    <%
+         for(var i=0; i<rows.length; i++)
+         {
+            var oneItem = rows[i];
+            console.log(oneItem);
+    %>
+    <tr>
+        <td><%=oneItem.idx%></td>
+        <td><%=oneItem.writer%></td>
+        <td><a href="../work/board/read/<%=oneItem.idx%>"><%=oneItem.title%></a></td>
+        <td><%=oneItem.hit%></td>
+        <td><%=oneItem.regdate%></td>
+    </tr>
+    <%
+         }
+    %>
+</table>
+<a href="/work"><button class="btn btn-default pull-right">Back</a><br />
+<a href="/work/board/write"><button class="btn btn-default pull-right">Write</a>
+</div>
+
+<div class="text-center">
+  <ul class="pagination">
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+  </ul>
+</div>
+
+
+</body>
+</html>
