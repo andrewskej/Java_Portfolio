@@ -73,8 +73,7 @@ app.use('/work/mall',mall);
 app.use('/work/chat',chat);
 
 
-const host = '0.0.0.0';
-var port = process.env.port || 3000;
-var server = http.listen(port, host, function(){
+var port = process.env.PORT || 3000;
+var server = http.listen(port, function(){
   console.log('Server connected: ', port);
 });
