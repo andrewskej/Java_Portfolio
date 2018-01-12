@@ -12,18 +12,31 @@ var io = require('socket.io')(http);
 var mysql = require('./config/mySQL');
 
 
+
+
 app.use(session({
    secret:'laksjdnflkasjdn',
    resave: false,
    saveUninitialized: true,
    store: new MySQLStore({
-     host:'localhost',
-     user:'root',
-     password:'1234',
-     database:'o2'
+     host :'us-cdbr-iron-east-05.cleardb.net',
+     user:'b1152505429577',
+     password:'f0c243ea',
+     database:'heroku_f42423e25f73df6'
    })
-}));
+// host:us-cdbr-iron-east-05.cleardb.net
+// user:b1152505429577
+// pwd:f0c243ea
+// db:heroku_f42423e25f73df6
+// reconnect=true
 
+}));
+console.log({
+    host            : process.env.DB_HOST,
+    user            : process.env.DB_USER,
+    password        : process.env.DB_SECRET,
+    database        : process.env.DB_DB
+ })
 var multer = require('multer');
 var path = require('path');
 var upload = multer({
@@ -60,7 +73,8 @@ app.use('/work/mall',mall);
 app.use('/work/chat',chat);
 
 
-
-var server = http.listen(3000, function(){
-  console.log('Server connected');
+const host = '0.0.0.0';
+var port = process.env.port || 3000;
+var server = http.listen(port, host, function(){
+  console.log('Server connected: ', port);
 });

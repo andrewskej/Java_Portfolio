@@ -2,11 +2,11 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
   var route = require('express').Router();
   var mysql = require('mysql');
   var pool = mysql.createPool({
-      connectionLimit: 10,
-      host: 'localhost',
-      user: 'root',
-      database: 'o2',
-      password: '1234'
+      connectionLimit: 100,
+      host :'us-cdbr-iron-east-05.cleardb.net',
+      user:'b1152505429577',
+      password:'f0c243ea',
+      database:'heroku_f42423e25f73df6'
   });
 
   route.get('/',function(req,res){

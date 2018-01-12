@@ -21,7 +21,7 @@
         <td><b>Hit</b></td>
         <td><b>RegDate</b></td>
     </tr>
-    <%
+    <%if(rows){
          for(var i=0; i<rows.length; i++)
          {
             var oneItem = rows[i];
@@ -36,6 +36,7 @@
     </tr>
     <%
          }
+       }
     %>
 </table>
 <a href="/work"><button class="btn btn-default pull-right">Back</a><br />

@@ -2,11 +2,11 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
   var route = require('express').Router();
   var mysql = require('mysql');
   var pool = mysql.createPool({
-      connectionLimit: 10,
-      host: 'localhost',
-      user: 'root',
-      database: 'o2',
-      password: '1234'
+      connectionLimit: 100,
+      host :'us-cdbr-iron-east-05.cleardb.net',
+      user:'b1152505429577',
+      password:'f0c243ea',
+      database:'heroku_f42423e25f73df6'
   });
 
 
@@ -39,7 +39,7 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
   route.get('/products',function(req,res){
     pool.getConnection(function(err,connection){
       connection.query("SELECT * from items", function(err,rows){
-        if(err) console.err("err : "+err);
+        if(err) console.log("err : "+err);
         if(req.session.username){
           var user ={username:req.session.username,level:req.session.level}
 

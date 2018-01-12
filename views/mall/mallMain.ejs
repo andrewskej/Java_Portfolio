@@ -141,11 +141,15 @@ h3 {
           <div class="modal-content">
              <div class="modal-header">
                 <button class="close" data-dismiss="modal">x</button>
-                <h4>My Cart: <%=user.username%></h4>
-             </div>
+<%if(user){ %>
+							  <h4>My Cart: <%=user.username%></h4>
+<% } %>
+					   </div>
 
           <form action="cartPurchase" method="get">
              <div class="modal-body">
+						 <%if(user){ %>
+
 							 	<% if(!myCart){ %>
 			            	<h3>Your cart is Empty!</h3>
 								<% } %>
@@ -162,11 +166,15 @@ h3 {
 	               	 		</div>
 										<% } %>
 									<% } %>
+								<% } %>
              <div class="modal-footer">
+						 <%if(user){ %>
 							 <%if(myCart){%>
 								 <p> <%=myCart.length %> Item(s)</p>
              			<input type="submit" class="btn btn-success" id="cartbuy" value="checkout">
 								<%}%>
+							<% } %>
+
              </div>
 					 </div>
           </form>
