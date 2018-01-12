@@ -45,12 +45,12 @@ $(document).ready(function(){
       }
       $('.chat_history_list').scrollTop($('#chat_logs').height());
     });
-    chat_user();
+  //  chat_user();
   });
 
-  function chat_user(){
-      socket.emit('chat_user','{"channel":workspace"}');
-    }
+  // function chat_user(){
+  //     socket.emit('chat_user','{"channel":workspace"}');
+  //   }
 
     socket.on('leave',function(){
       var leftmsg = "---A user has Left---\n";
