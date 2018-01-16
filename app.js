@@ -31,12 +31,7 @@ app.use(session({
 // reconnect=true
 
 }));
-console.log({
-    host            : process.env.DB_HOST,
-    user            : process.env.DB_USER,
-    password        : process.env.DB_SECRET,
-    database        : process.env.DB_DB
- })
+
 var multer = require('multer');
 var path = require('path');
 var upload = multer({
@@ -56,6 +51,10 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 app.use('/public', express.static('public'));
+
+//요러면 이미지가 뜨긴 하는데....
+app.use("/uploads", express.static(__dirname + '/uploads'));
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

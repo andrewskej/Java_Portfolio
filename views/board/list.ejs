@@ -3,13 +3,19 @@
 <head>
     <title>Board</title>
 </head>
+<body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<body>
+<style type="text/css">
+#guestWrite:hover
+{
+color:red
+}
+</style>
 
 <div class="container">
-<h1><%= title %> Board</h1>
+<h1><a href="./" class="glyphicon glyphicon-home lg" ></a>  <%= title %> Board</h1>
 <h3>Username: <%=user.username%></h3>
 <h3>Level:   <%=user.level%></h3>
 
@@ -30,7 +36,7 @@
     <tr>
         <td><%=oneItem.idx%></td>
         <td><%=oneItem.writer%></td>
-        <td><a href="../work/board/read/<%=oneItem.idx%>"><%=oneItem.title%></a></td>
+        <td><a href="/work/board/read/<%=oneItem.idx%>"><%=oneItem.title%></a></td>
         <td><%=oneItem.hit%></td>
         <td><%=oneItem.regdate%></td>
     </tr>
@@ -39,8 +45,16 @@
        }
     %>
 </table>
-<a href="/work"><button class="btn btn-default pull-right">Back</a><br />
+<%if(user.username){%>
 <a href="/work/board/write"><button class="btn btn-default pull-right">Write</a>
+<%}%>
+<%if(!user.username){%>
+<div>
+  <button id="guestWrite" class="btn btn-default pull-right" disabled>Write</a><br />
+  <span>Login is required</span>
+</div>
+<%}%>
+
 </div>
 
 <div class="text-center">

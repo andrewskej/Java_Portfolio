@@ -10,10 +10,11 @@
   $(document).ready(function(){
     $('#delbtn').click(function(){
     if(confirm('Are you sure?')){
-//      location.href="/work/board/del";
       $('#delConfirm').submit();
       }
     })
+
+
   })
 </script>
 <body>
@@ -41,31 +42,53 @@
         <tr height="300px">
             <td>Content</td>
             <td><h4><p><%=rows[0].content%></p></h4>
-            <!-- <img src= '<%=rows[0].imgsrc%>' alt=''/> -->
+            <%if(image){ %>
+              <img src='/<%-image%>'>
+            <%}%>
             </td>
         </tr>
       </table>
-      <a href="/work/board/edit/<%=rows[0].idx %>"><input type="button" class="btn btn-warning" value="Edit"/></a>
+<%if(user){%>
+    <% if(user.username == rows[0].writer ||user.level == 'admin'){ %>
+      <a href="/work/board/edit/<%=rows[0].idx %>"><input id="editbtn" type="button" class="btn btn-warning" value="Edit"/></a>
       <input type="button" class="btn btn-danger" id="delbtn" value="Del"/>
+    <%}%>
+    <% if(user.username != rows[0].writer &&user.level !='admin'){ %>
+      <a href="/work/board/edit/<%=rows[0].idx %>"><input id="editbtn" type="button" class="btn btn-warning" value="Edit" disabled/></a>
+      <input type="button" class="btn btn-danger" id="delbtn" value="Del" disabled/>
+    <%}%>
+<%}%>
       <a href="/work/board"><input type="button" class="btn btn-default" value="back" /></a>
   </form>
   <br />
 
 
 <!-- under construction below -->
-  <!-- comments comes here..? -->
+  <!-- comments -->
+<%if(results){%>
+  <table>
+    <% for(var i=0;i<results.length;i++){  %>
+    <tr id="<%=results[i].cmtNo%>">
+        <td><%=results[i].cmtWriter%>   :   </td>
+        <td><%=results[i].cmt%></td>
+        <td><%=results[i].cmtDate%></td>
+        <td><a href="../commentDel/<%=results[i].cmtNo%>"><button class="btn btn-default" id="cmtDel">x</button></a></td>
+    </tr>
+    <% } %>
+  </table><br />
+<% } %>
 
 
   <!-- Leave comments -->
   <div>
-    <form action="/comment" method="post">
-      <textarea rows=5 cols=66></textarea><br />
-      <input type="text" name="cmtWriter" placeholder="commenter" value=""/>
+    <form action="../comment/<%=rows[0].idx %>" method="post">
+      <input type="text" name="cmtWriter" placeholder="name" value="" required/><br /><br />
+      <textarea rows=5 cols=66 name="cmt" required></textarea><br />
       <input type="password" placeholder="password" name="cmtPwd" required/>
       <input type="submit" class="btn btn-default" value="Leave Comments" /><br />
     </form><br />
   </div>
-  
+
 <!-- under construction above-->
 
 </div>
