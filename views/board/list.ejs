@@ -15,7 +15,7 @@ color:red
 </style>
 
 <div class="container">
-<h1><a href="./" class="glyphicon glyphicon-home lg" ></a>  <%= title %> Board</h1>
+<h1><a href="../" class="glyphicon glyphicon-home lg" ></a>  <%= title %> Board</h1>
 <h3>Username: <%=user.username%></h3>
 <h3>Level:   <%=user.level%></h3>
 
@@ -27,11 +27,16 @@ color:red
         <td><b>Hit</b></td>
         <td><b>RegDate</b></td>
     </tr>
-    <%if(rows){
-         for(var i=0; i<rows.length; i++)
-         {
-            var oneItem = rows[i];
-            console.log(oneItem);
+    each page : <%=each_page%>
+    total : <%=total%>
+
+  <%
+  if(rows){
+    for(var i=(page*each_page)-each_page; i<page*each_page;i++){
+        if(i>total){
+          i++;
+        }else{
+          var oneItem = rows[i];
     %>
     <tr>
         <td><%=oneItem.idx%></td>
@@ -43,8 +48,12 @@ color:red
     <%
          }
        }
+   }
     %>
 </table>
+<form action="/work/board/search" method="post">
+  <input type="text"  placeholder="search" name="search" /><input type="submit" value="Search"/>
+</form>
 <%if(user.username){%>
 <a href="/work/board/write"><button class="btn btn-default pull-right">Write</a>
 <%}%>
@@ -59,9 +68,10 @@ color:red
 
 <div class="text-center">
   <ul class="pagination">
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
+    <% for(var j=0;j<(rows.length/10);j++){  %>
+    <li><a href="/work/board/page/<%=j+1%>"><%=j+1%></a></li>
+    <% } %>
+    <br />    <%=page%> / <%= Math.ceil(rows.length/10)%> page
   </ul>
 </div>
 

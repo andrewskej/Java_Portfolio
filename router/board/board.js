@@ -12,7 +12,14 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
 
   var formidable = require('formidable');
 
-   route.get('/',function(req,res){
+
+   route.get(['/','/page/:page'],function(req,res,next){
+     if(req.params.page){
+     var page = req.params.page;
+     }else{
+       page=1;
+     }
+     console.log("loading "+page+" page...");
      pool.getConnection(function (err, connection) {
       connection.query('SELECT * FROM board order by idx desc', function (err, rows) {
           if (err) console.error("err : " + err);
@@ -22,11 +29,13 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
             }else{
                 user={username:null}
             }
-          res.render('../views/board/list', {title: 'Free', rows: rows, user:user});
+          res.render('../views/board/list', {title: 'Free', rows: rows, page:page, total:Object.keys(rows).length-1, each_page:10, user:user});
           connection.release();
           });
        });
    });
+
+
 
    route.get('/write', function(req,res){
      if(req.session.username){
@@ -109,7 +118,30 @@ route.get('/read/:idx',function(req,res){
     };
 
 
-
+    route.post('/search',function(req,res){
+      var keyword = req.body.search;
+      if(req.session.username){
+        var user = {username: req.session.username, level:req.session.level}
+      }else{
+        user = {username: null,level:null}
+      }
+      console.log('Search by: '+ keyword)
+      pool.getConnection(function(err,connection){
+       var query = "select * from board where title Like "+ connection.escape('%'+keyword+'%')
+        connection.query(query,[keyword],function(err,rows){
+          if(err) console.log(query)
+          var page = Math.ceil(rows.length/10);
+          console.log('search query: '+query);
+          console.log('search results: '+ JSON.stringify(rows));
+          if(JSON.stringify(rows)=="[]"){
+           console.log('No results found. redirecting to Board')
+           res.redirect('/work/board/');
+         }else{
+          res.render('../views/board/list', {title: 'Free', rows: rows, page:page, total:Object.keys(rows).length-1, each_page:10, user:user});
+        }
+      })
+    })
+  })
 
 
 
