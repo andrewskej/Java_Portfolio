@@ -8,16 +8,25 @@
 </head>
 <script>
   $(document).ready(function(){
+
     $('#delbtn').click(function(){
     if(confirm('Are you sure?')){
       $('#delConfirm').submit();
       }
     })
 
+    // $('#cmtDel').click(function(){ //it only reacts to the top of the list button...
+    //     alert( $('#cmtDel').val() )
+    // //   $('#cmtDel').prepend($('#cmtDelPwd'))
+    //
+    //   //  $('#cmtDel').html($('#cmtDelSet'))
+    // })
 
   })
 </script>
 <body>
+
+
 <div class="container">
 <h1>Board</h1>
 <form action="/work/board/del" id="delConfirm" method="post">
@@ -68,12 +77,19 @@
 <%if(results){%>
   <table>
     <% for(var i=0;i<results.length;i++){  %>
-    <tr id="<%=results[i].cmtNo%>">
-        <td><%=results[i].cmtWriter%>   :   </td>
-        <td><%=results[i].cmt%></td>
-        <td><%=results[i].cmtDate%></td>
-        <td><a href="../commentDel/<%=results[i].cmtNo%>"><button class="btn btn-default" id="cmtDel">x</button></a></td>
+      <%  var comment = results[i];    %>
+    <!-- <tr id="<%=comment.cmtNo%>"> -->
+    <tr>
+        <td><%=comment.cmtWriter%>   :   </td>
+        <td><%=comment.cmt%></td>
+        <td><%=comment.cmtDate%></td>
+        <!-- <td><button class="btn btn-default" value="<%=comment.cmtNo%>" id="cmtDel">x</button></a></td> -->
+        <td><a href="../commentDel/<%=comment.cmtNo%>"><button class="btn btn-default" id="cmtDel">x</button></a></td>
     </tr>
+    <!-- <div id="cmtDelSet">
+      <input type="text" placeholder="password" name="cmtDelPwd" value="" id="cmtDelPwd"/>
+      <button id="ctmDelBtn" class="btn btn-danger">del</button>
+    </div> -->
     <% } %>
   </table><br />
 <% } %>

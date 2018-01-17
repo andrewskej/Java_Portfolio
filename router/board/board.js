@@ -53,7 +53,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
  route.post('/write',function(req,res){
    pool.getConnection(function(err,connection){
      var form = new formidable.IncomingForm();
-         form.uploadDir = './uploads';
+         form.uploadDir = './uploads/board';
          form.keepExtensions = true;
          form.maxFieldsSize = 10*1024*1024;
          form.parse(req, function(err, fields, files){
@@ -80,7 +80,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
         if(err)console.log(err);
         res.redirect('/work/board/');
         connection.release();
-            });
+          });
       });
    });
 });

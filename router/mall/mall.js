@@ -2,7 +2,7 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
   var route = require('express').Router();
   var mysql = require('mysql');
   var pool = mysql.createPool({
-      connectionLimit: 100,
+      connectionLimit: 10,
       host :'us-cdbr-iron-east-05.cleardb.net',
       user:'b1152505429577',
       password:'f0c243ea',

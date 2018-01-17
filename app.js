@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
@@ -10,7 +9,6 @@ var multiparty = require('multiparty');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('./config/mySQL');
-
 
 
 
@@ -24,11 +22,6 @@ app.use(session({
      password:'f0c243ea',
      database:'heroku_f42423e25f73df6'
    })
-// host:us-cdbr-iron-east-05.cleardb.net
-// user:b1152505429577
-// pwd:f0c243ea
-// db:heroku_f42423e25f73df6
-// reconnect=true
 
 }));
 
@@ -46,16 +39,18 @@ var upload = multer({
 });
 
 
+//Use 'ejs' as view engine//
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-app.use('/public', express.static('public'));
 
-//요러면 이미지가 뜨긴 하는데....
+//Well this displays uploaded images...but do I really have to define every static route? //
+app.use("/public", express.static('public'));
 app.use("/uploads", express.static(__dirname + '/uploads'));
+app.use("/uploads/board", express.static(__dirname + '/uploads/board'));
+app.use("/uploads/mall", express.static(__dirname + '/uploads/mall'));
 
-app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
