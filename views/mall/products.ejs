@@ -7,41 +7,39 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
-    /* Remove the navbar's default rounded borders and increase the bottom margin */
-    .navbar {
-      margin-bottom: 50px;
-      border-radius: 0;
-    }
+/* Remove the navbar's default rounded borders and increase the bottom margin */
+.navbar {
+margin-bottom: 50px;
+border-radius: 0;
+}
 
-    /* Remove the jumbotron's default bottom margin */
-     .jumbotron {
-      margin-bottom: 0;
-    }
+/* Remove the jumbotron's default bottom margin */
+.jumbotron {
+margin-bottom: 0;
+}
 
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
-    .div1{
+/* Add a gray background color and some padding to the footer */
+footer {
+background-color: #f2f2f2;
+padding: 25px;
+}
 
-   text-align: right;
-   }
+.div1{
+text-align: right;
+}
 
-	h3{
-	   text-align: center;
-	}
+h3{
+text-align: center;
+}
 
-	.img11{
-	  width:300px;
-	  height:300px;
-	}
+.img11{
+width:300px;
+height:300px;
+}
 
-    .borderdiv img{
-      border:1px dashed gray;
-    }
-
-
+.borderdiv img{
+border:1px dashed gray;
+}
 </style>
 <script type="text/javascript">
 
@@ -75,7 +73,7 @@ $(document).ready(function(){
        <div class="collapse navbar-collapse" id="myNavbar">
          <ul class="nav navbar-nav">
            <li><a href="../../work" class="glyphicon glyphicon-home"></a></li>
-           <li><a href="../mall/">Mall Main</a></li>
+           <li><a href="/work/mall/">Mall Main</a></li>
            <li class="active"><a href="#">All products</a></li>
            <!-- <li><a href="giftGuide">Gift Guide</a></li> -->
          </ul>
@@ -157,16 +155,22 @@ $(document).ready(function(){
 
 
 	<!-- Main -->
+  each page : <%=each_page%>
+  total : <%=total%>
    <div class="row text-center">
-    <%if(rows){ %>
-     <% for(var i =0;i<rows.length;i++)
-       { var item = rows[i];
-       console.log(item);
+
+    <%
+    if(rows){
+     for(var i=(page*each_page)-each_page; i<page*each_page;i++){
+    if(i>total){
+      i++;
+    }else{
+       var item = rows[i];
        %>
 		  <div class="col-sm-4">
 		    <div class="borderdiv">
-         <a href="itemDetail/<%=item.ITEMNO%>"><img src="uploads/<%=item.ITEMIMG%>" class="img11" alt=""></a>
-		     <p><a href="itemDetail/<%=item.ITEMNO%>"><strong>    <%=item.ITEMNAME%> </strong></a></p>
+         <a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><img src="/<%=item.ITEMIMG%>" class="img11" alt=""></a>
+		     <p><a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><strong>    <%=item.ITEMNAME%> </strong></a></p>
 		     <p>No:<%=item.ITEMNO%></p><p>$: <%=item.ITEMPRICE%></p>
 
            <!-- <c:if test="${myLevel=='Red' }">
@@ -174,31 +178,24 @@ $(document).ready(function(){
 		       </c:if> -->
 		     </div>
 		  </div>
-      <%  }  %>
-    <%  }  %>
+    <%
+        }
+      }
+    }
+      %>
 	</div>
 
-	 <!-- paging -->
-   <div class="row text-center"><br><br>
-   <span class="strong">${pg}</span>/${finalPage} page<br>
-       <c:if test="${sPage!=1}">
-          <a class="prev" href="allProducts.do?pg=${sPage-1}&f=${field}&q=${urlQuery}">이전</a>
-       </c:if>
-       <c:forEach var="i" begin="0" end="8">
-          <c:if test="${i+sPage<=finalPage }">
-            <c:if test="${i+sPage==pg}">
-               <a class="strong">${i+sPage }</a>
-            </c:if>
-            <c:if test="${i+sPage!=pg}">
-               <a href="allProducts.do?pg=${i+sPage}&f=${field}&q=${urlQuery}">${i+sPage}</a>
-            </c:if>
-          </c:if>
-       </c:forEach>
-       <c:if test="${sPage+8<finalPage }">
-          <a class="next" href="allProducts.do?pg=${sPage+9}&f=${field}&q=${urlQuery}">다음</a>
-       </c:if>
-     </div>
-      <!-- paging ends -->
+
+      <!--  paging wip -->
+      <div class="text-center">
+        <ul class="pagination">
+          <% for(var j=0;j<(rows.length/9);j++){  %>
+          <li><a href="/work/mall/products/<%=j+1%>"><%=j+1%></a></li>
+          <% } %>
+          <br /><br />    <%=page%> / <%= Math.ceil(rows.length/9)%> page
+        </ul>
+      </div>
+      <!--  paging ends -->
 
 
 	<!--    Main Ends -->

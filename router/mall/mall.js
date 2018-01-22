@@ -9,13 +9,12 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
       database:'heroku_f42423e25f73df6'
   });
 
-
+var formidable = require('formidable');
 
 
   route.get('/',function(req,res){
         if(req.session.username){
           var user = {username:req.session.username,level:req.session.level}
-// ------------Repetitive codes...wanna take out as function but failing..----------------
           var myCart = new Array();
             pool.getConnection(function(err,connection){
               connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
@@ -29,51 +28,52 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
                 res.render('../views/mall/mallMain',{user:user,myCart:myCart})
               })
             })
-// ----------------------------
             }else{
           res.render('../views/mall/mallMain',{user:undefined});
         }
     });
 
 
-  route.get('/products',function(req,res){
+  route.get(['/products/','/products/:page'],function(req,res){
+    if(req.params.page){
+    var page = req.params.page;
+    }else{
+      page=1;
+    }
+    console.log("loading " + page + " page...")
     pool.getConnection(function(err,connection){
       connection.query("SELECT * from items", function(err,rows){
         if(err) console.log("err : "+err);
         if(req.session.username){
           var user ={username:req.session.username,level:req.session.level}
-
-        // ------------Repetitive codes...wanna take out as function but failing..----------------
           var myCart = new Array();
             pool.getConnection(function(err,connection){
               connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
                 for(var i =0;i<results.length;i++){
                   myCart.push(results[i]);
                 }
-                res.render('../views/mall/products',{title:'mall',rows:rows, user:user,myCart:myCart});
+                console.log(rows)
+                res.render('../views/mall/products',{title:'mall', rows:rows, page:page, total:Object.keys(rows).length-1, each_page:9, user:user, myCart:myCart});
               })
             })
-        // ----------------------------
         }else{
-          res.render('../views/mall/products',{title:'mall',rows:rows, user:undefined});
+          res.render('../views/mall/products',{title:'mall', rows:rows, page:page, total:Object.keys(rows).length-1, each_page:9, user:undefined});
         }
         connection.release();
       });
     });
   });
 
-  route.get('/itemDetail/:ITEMNO',function(req,res){
+  route.get('/itemDetail/:itemNo',function(req,res){
     pool.getConnection(function(err,connection){
-      var ITEMNO = req.params.ITEMNO;
-      console.log('ITEMNO: '+ITEMNO);
+      var itemNo = req.params.itemNo;
+      console.log('itemNo: '+itemNo);
       var query = 'SELECT * from items WHERE ITEMNO=?'
-      connection.query(query,[ITEMNO], function(err,rows){
+      connection.query(query,[itemNo], function(err,rows){
         if(err) console.log(err);
         if(req.session.username){
           var user ={username:req.session.username,level:req.session.level}
-
-          // ------------Repetitive codes...wanna take out as function but failing..----------------
-            var myCart = new Array();
+          var myCart = new Array();
               pool.getConnection(function(err,connection){
                 connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
                   for(var i =0;i<results.length;i++){
@@ -82,7 +82,6 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
                   return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],user:user,myCart:myCart});
                 })
               })
-          // ----------------------------
 
         }else if(!req.session.username){
           return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],user:undefined});
@@ -116,22 +115,33 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
     res.render('../views/mall/mallAdmin')
   })
 
+
   route.post('/itemUp',function(req,res){
-    var ITEMNAME = req.body.ITEMNAME;
-    var ITEMPRICE = req.body.ITEMPRICE;
-    var ITEMSTOCK = req.body.ITEMSTOCK;
-    var ITEMDESC = req.body.ITEMDESC;
-    console.log(ITEMNAME);
     pool.getConnection(function(err,connection){
-      var query = "insert into items (ITEMNAME,ITEMPRICE,ITEMSTOCK,ITEMDESC) values (?,?,?,?)"
-      connection.query(query,[ITEMNAME,ITEMPRICE,ITEMSTOCK,ITEMDESC],function(err,result){
+      var form = new formidable.IncomingForm();
+          form.uploadDir = './uploads/mall';
+          form.keepExtensions = true;
+          form.maxFieldsSize = 10*1024*1024;
+          form.parse(req,function(err,fields,files){
+          console.log('fields: '+JSON.stringify(fields));
+          console.log('files: '+JSON.stringify(files));
+            var itemName = fields.itemName;
+            console.log('ITEMNAME: '+itemName)
+            var itemPrice = fields.itemPrice;
+            var itemStock = fields.itemStock;
+            var itemDesc = fields.itemDesc;
+            var itemImg = files.itemImg.path;
+
+      var query = "insert into items (ITEMNAME,ITEMPRICE,ITEMSTOCK,ITEMIMG,ITEMDESC) values (?,?,?,?,?)"
+      connection.query(query,[itemName,itemPrice,itemStock,itemImg,itemDesc],function(err,result){
         if(err)console.log(err);
-        console.log("result:"+result);
         res.redirect('../mall/mallAdmin');
-        connection.release();
-        })
+      connection.release();
+              })
+          })
       })
    })
+
 
    //cart
    route.get('/toCart/:ITEMNO',function(req,res){

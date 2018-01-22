@@ -160,11 +160,10 @@
 
    <!-- item Detail -->
     <table border="2" class="table">
-			<tr><td><p><b><%=rows[0].ITEMNO%></b></p></td></tr>
-      <tr><td><p><b><%=rows[0].ITEMNAME%></b></p></td></tr>
+			<tr><td><p><b># <%=rows[0].ITEMNO%> . <%=rows[0].ITEMNAME%></b></p></td></tr>
       <tr><td><p>Price:<b>$ <%=rows[0].ITEMPRICE%></b>,    in Stock: <%=rows[0].ITEMSTOCK%></p></td>
-      <tr><td><p><%=rows[0].ITEMDESC%></p></td></tr>
-			<!-- <tr><td><img src="uploads/<%=rows[0].ITEMIMG%>" style = "width:600px;" /><br></td></tr> -->
+			<tr><td><img src="/<%=rows[0].ITEMIMG%>" style = "width:600px;" /><br></td></tr>
+			<tr><td><p><%=rows[0].ITEMDESC%></p></td></tr>
     </table>
 		<% if(rows[0].ITEMSTOCK<=0){ %>
 	   	<h2 id="soldout">This item is currently sold out</h2>
