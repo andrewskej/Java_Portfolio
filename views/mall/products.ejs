@@ -7,23 +7,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
-/* Remove the navbar's default rounded borders and increase the bottom margin */
-.navbar {
-margin-bottom: 50px;
-border-radius: 0;
-}
-
-/* Remove the jumbotron's default bottom margin */
-.jumbotron {
-margin-bottom: 0;
-}
-
-/* Add a gray background color and some padding to the footer */
-footer {
-background-color: #f2f2f2;
-padding: 25px;
-}
-
 .div1{
 text-align: right;
 }
@@ -172,20 +155,14 @@ $(document).ready(function(){
          <a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><img src="/<%=item.ITEMIMG%>" class="img11" alt=""></a>
 		     <p><a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><strong>    <%=item.ITEMNAME%> </strong></a></p>
 		     <p>No:<%=item.ITEMNO%></p><p>$: <%=item.ITEMPRICE%></p>
-
-           <!-- <c:if test="${myLevel=='Red' }">
-		            <a href="itemDel.do?itemNo=${i.itemNo}"><button class="btn btn-danger">x</button></a>
-		       </c:if> -->
-		     </div>
-		  </div>
-    <%
-        }
-      }
-    }
-      %>
-	</div>
-
-
+				<%if(user && user.level=='admin'){ %>
+					<p><a href ="/work/mall/itemDel/<%=item.ITEMNO%>"><button class="btn btn-danger">x</button></a></p>
+				<% } %>
+			</div>
+		</div>
+		<% }%>
+	<% }%>
+<% }%>
       <!--  paging wip -->
       <div class="text-center">
         <ul class="pagination">

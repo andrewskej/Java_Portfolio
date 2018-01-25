@@ -82,7 +82,6 @@ var formidable = require('formidable');
                   return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],user:user,myCart:myCart});
                 })
               })
-
         }else if(!req.session.username){
           return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],user:undefined});
         }
@@ -94,7 +93,6 @@ var formidable = require('formidable');
   route.get('/giftGuide',function(req,res){
     if(req.session.username){
       var user = {username:req.session.username,level:req.session.level}
-  // ------------Repetitive codes...wanna take out as function but failing..----------------
       var myCart = new Array();
         pool.getConnection(function(err,connection){
           connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
@@ -131,7 +129,6 @@ var formidable = require('formidable');
             var itemStock = fields.itemStock;
             var itemDesc = fields.itemDesc;
             var itemImg = files.itemImg.path;
-
       var query = "insert into items (ITEMNAME,ITEMPRICE,ITEMSTOCK,ITEMIMG,ITEMDESC) values (?,?,?,?,?)"
       connection.query(query,[itemName,itemPrice,itemStock,itemImg,itemDesc],function(err,result){
         if(err)console.log(err);
@@ -140,6 +137,18 @@ var formidable = require('formidable');
               })
           })
       })
+   })
+
+   route.get('/itemDel/:ITEMNO',function(req,res){
+     var itemNo = req.params.ITEMNO;
+     console.log('itemNo: ' + itemNo)
+     pool.getConnection(function(err,connection){
+     var query = "delete from items where itemno = ?"
+     connection.query(query, [itemNo], function(err,result){
+     res.redirect('../products')
+     connection.release();
+     })
+    })
    })
 
 
