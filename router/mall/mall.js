@@ -161,17 +161,53 @@ var formidable = require('formidable');
        connection.query(query,[itemNo],function(err,result){
          if(err)console.log(err);
          console.log('result[0].ITEMNAME: '+result[0].ITEMNAME);
-         var query2 = "insert into myCart (CARTNAME,ITEMNO,ITEMNAME,PRICE,QUANTITY,CARTNO) values(?,?,?,?,1,default) "
-         connection.query(query2,[req.session.username,result[0].ITEMNO,result[0].ITEMNAME,result[0].ITEMPRICE],function(err,cart){
-          if(err)console.log(err);
-           console.log('item added to My Cart')
-           connection.release();
-           res.redirect('../products')
-         })
+         console.log('result[0].ITEMNO: '+result[0].ITEMNO);
+        var query2 = "select * from myCart where ITEMNO =?"
+        connection.query(query2, [itemNo], function(err, rows){
+          console.log(rows[0])
+          if(rows[0] != undefined){
+            var query3 = "update myCart set QUANTITY = QUANTITY+1 WHERE ITEMNO = ?"
+            connection.query(query3, [result[0].ITEMNO], function(err,cart){
+            console.log('item +1 ed to My Cart')
+            })
+          }else{
+            var query4 = "insert into myCart (CARTNAME,ITEMNO,ITEMNAME,PRICE,QUANTITY,CARTNO) values(?,?,?,?,1,default) "
+            connection.query(query4,[req.session.username,result[0].ITEMNO,result[0].ITEMNAME,result[0].ITEMPRICE],function(err,cart){
+            if(err)console.log(err);
+            console.log('new item added to My Cart')
+            })
+          }
+        })
+       connection.release();
+       res.redirect('../products')
        })
      })
    })
 
+
+   route.get('/delCart/:ITEMNO',function(req,res){
+     var itemNo = req.params.ITEMNO;
+     console.log("CartItemDel: " +itemNo)
+     pool.getConnection(function(err,connection){
+       var query = "delete from myCart where ITEMNO = ?"
+       connection.query(query, [itemNo], function(err,result){
+       })
+       console.log('item removed from My Cart')
+       connection.release();
+       res.redirect('../products')
+     })
+   })
+
+
+   route.get('/cartPurchase',function(req,res){
+       var items = new Array();
+       items = req.body.checked;
+       console.log(items)
+
+      //  for(var i=0; i<items.size; i++){
+      //  console.log(items[i])
+      // }
+  })
 
 
 return route;

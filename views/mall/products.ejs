@@ -55,7 +55,7 @@ $(document).ready(function(){
     <nav class="navbar navbar-inverse">
        <div class="collapse navbar-collapse" id="myNavbar">
          <ul class="nav navbar-nav">
-           <li><a href="../../work" class="glyphicon glyphicon-home"></a></li>
+           <li><a href="../../" class="glyphicon glyphicon-home"></a></li>
            <li><a href="/work/mall/">Mall Main</a></li>
            <li class="active"><a href="#">All products</a></li>
            <!-- <li><a href="giftGuide">Gift Guide</a></li> -->
@@ -85,7 +85,7 @@ $(document).ready(function(){
               <%}%>
               </div>
 
-           <form action="cartPurchase" method="get">
+           <form action="/cartPurchase" method="get">
               <div class="modal-body">
             <%if(user){ %>
                  <% if(!myCart){ %>
@@ -99,7 +99,7 @@ $(document).ready(function(){
                           <p>itemName: <%=myCart[i].ITEMNAME%></p>
                           <p>Price($): <%=myCart[i].PRICE%></p>
                           <p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
-                          <a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
+                          <a class="btn btn-danger" href="delCart/<%=myCart[i].ITEMNO%>">remove</a>
                           <p>----------------------------------------</p>
                        </div>
                      <% } %>
