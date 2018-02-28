@@ -50,7 +50,10 @@
         </tr>
         <tr height="300px">
             <td>Content</td>
-            <td><h4><p><%=rows[0].content%></p></h4>
+            <td><h4><p>original text:</p>
+            <p><%=rows[0].content%></p></h4>
+            <br /><br />
+            <h4><p><%=rows[0].contentTR%></p>
             <%if(image){ %>
               <img src='/<%-image%>'>
             <%}%>
@@ -76,12 +79,14 @@
   <!-- comments -->
 <%if(results){%>
   <table>
+    <h3><b>Comments</b></h3>
     <% for(var i=0;i<results.length;i++){  %>
       <%  var comment = results[i];    %>
     <!-- <tr id="<%=comment.cmtNo%>"> -->
     <tr>
         <td><%=comment.cmtWriter%>   :   </td>
-        <td><%=comment.cmt%></td>
+        <td><%=comment.cmtTR%></td><br /><br />
+        <td>original text: <%=comment.cmt%></td><br />
         <td><%=comment.cmtDate%></td>
         <!-- <td><button class="btn btn-default" value="<%=comment.cmtNo%>" id="cmtDel">x</button></a></td> -->
         <td><a href="../commentDel/<%=comment.cmtNo%>"><button class="btn btn-default" id="cmtDel">x</button></a></td>
@@ -98,7 +103,17 @@
   <!-- Leave comments -->
   <div>
     <form action="../comment/<%=rows[0].idx %>" method="post">
+
       <input type="text" name="cmtWriter" placeholder="name" value="" required/><br /><br />
+      <select name="cmtlang">
+        <option value="en">
+         Default: English
+        </option>
+        <option value="ko">kor</option>
+        <option value="ja">jpn</option>
+        <option value="zh-TW">zh-traditional</option>
+        <option value="zh-CN">zh-simplified</option>
+      </select><br /><br />
       <textarea rows=5 cols=66 name="cmt" required></textarea><br />
       <input type="password" placeholder="password" name="cmtPwd" required/>
       <input type="submit" class="btn btn-default" value="Leave Comments" /><br />

@@ -1,6 +1,7 @@
 module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,bodyParser){
   var route = require('express').Router();
   var mysql = require('mysql');
+  var googleTranslate = require('google-translate')('AIzaSyCrGa9ekWOTGSlQqtCO9tL_Un_K2N-09Ak');
   var pool = mysql.createPool({
       connectionLimit: 10,
       host :'us-cdbr-iron-east-05.cleardb.net',
@@ -11,6 +12,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
   });
 
   var formidable = require('formidable');
+
 
 
    route.get(['/','/page/:page'],function(req,res,next){
@@ -60,7 +62,6 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
             console.log('fields: ' + JSON.stringify(fields));
             console.log('files: ' + JSON.stringify(files));
          var title = fields.title;
-         var content = fields.content;
          var imgsrc,writer;
           if(req.session.username){
             writer = req.session.username;
@@ -74,13 +75,22 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
           }else{
             imgsrc = "";
          }
-        var query='INSERT into board (writer,title,content,imgsrc) values(?,?,?,?)';
-        connection.query(query,[writer,title,content,imgsrc],function(err,rows){
-        console.log(title + ":" + writer + ":" + content + ":" + imgsrc);
-        if(err)console.log(err);
-        res.redirect('/work/board/');
-        connection.release();
+         var content = fields.content;
+         var lang = fields.lang;
+         //zh-CN, zh-TW, en, ja, ko
+         googleTranslate.translate(content,lang,function(err,translation){
+         var contentTR = translation.translatedText;
+         console.log('lang:'+lang)
+          var query='INSERT into board (writer,title,content,contentTR,imgsrc) values(?,?,?,?,?)';
+
+          connection.query(query,[writer,title,content,contentTR,imgsrc],function(err,rows){
+          if(err)console.log(err);
+          res.redirect('/work/board/');
+          connection.release();
           });
+
+        });
+
       });
    });
 });
@@ -194,13 +204,20 @@ route.get('/read/:idx',function(req,res){
        var cmtWriter = req.body.cmtWriter;
        var cmt = req.body.cmt;
        var cmtPwd = req.body.cmtPwd;
+       var cmtlang = req.body.cmtlang;
+       console.log('cmtLang: '+cmtlang);
 
-       var query = 'insert into comments (cmtBrd,cmtWriter,cmt,cmtPwd) values(?,?,?,?)';
-       connection.query(query,[cmtBrd,cmtWriter,cmt,cmtPwd],function(err,result){
+       googleTranslate.translate(cmt,cmtlang,function(err,translation){
+       var cmtTR = translation.translatedText;
+
+       var query = 'insert into comments (cmtBrd,cmtWriter,cmt,cmtTR,cmtPwd) values(?,?,?,?,?)';
+       connection.query(query,[cmtBrd,cmtWriter,cmt,cmtTR,cmtPwd],function(err,result){
          console.log('You\'ve left a comment!');
          res.redirect('/work/board/read/'+idx);
          connection.release();
        })
+     })
+
      })
    })
 

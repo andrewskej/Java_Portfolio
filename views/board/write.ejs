@@ -29,8 +29,17 @@ $(document).ready(function(){
    <input type="text" name="writer" placeholder="username" required /><br />
  <%}%>
    <input type="text" name="title" placeholder="title" required><br /><br />
-
- <textarea rows=20 cols=100 name="content" id="content" placeholder="Max. length limited to 2,000 characters"></textarea><br />
+<select name="lang">
+  <option value="en">
+   Default: English
+  </option>
+  <option value="ko">kor</option>
+  <option value="ja">jpn</option>
+  <option value="zh-TW">zh-traditional</option>
+  <option value="zh-CN">zh-simplified</option>
+</select>
+<br /><br />
+ <textarea rows=20 cols=100 name="content" id="content" placeholder="Max. length limited to 2,000 characters."></textarea><br />
 
  <input type="file" name="imgsrc" /><br />
 
