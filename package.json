@@ -33,6 +33,7 @@
     "paypal": "^1.0.1",
     "pbkdf2-password": "^1.2.1",
     "redis": "^2.8.0",
+    "serve-favicon": "^2.4.5",
     "socket.io": "^2.0.4"
   },
   "author": "Yousik Jeon",

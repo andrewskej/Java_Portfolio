@@ -201,17 +201,20 @@ route.get('/read/:idx',function(req,res){
      pool.getConnection(function(err,connection){
        var idx = req.params.idx;
        var cmtBrd = idx;
-       var cmtWriter = req.body.cmtWriter;
+       var cmtWriter = req.session.username;
        var cmt = req.body.cmt;
-       var cmtPwd = req.body.cmtPwd;
+
+
        var cmtlang = req.body.cmtlang;
+       console.log('cmtWriter:'+cmtWriter);
+       console.log('cmt:'+cmt)
        console.log('cmtLang: '+cmtlang);
 
        googleTranslate.translate(cmt,cmtlang,function(err,translation){
        var cmtTR = translation.translatedText;
 
-       var query = 'insert into comments (cmtBrd,cmtWriter,cmt,cmtTR,cmtPwd) values(?,?,?,?,?)';
-       connection.query(query,[cmtBrd,cmtWriter,cmt,cmtTR,cmtPwd],function(err,result){
+       var query = 'insert into comments (cmtBrd,cmtWriter,cmt,cmtTR) values(?,?,?,?)';
+       connection.query(query,[cmtBrd,cmtWriter,cmt,cmtTR],function(err,result){
          console.log('You\'ve left a comment!');
          res.redirect('/work/board/read/'+idx);
          connection.release();
@@ -226,16 +229,11 @@ route.get('/read/:idx',function(req,res){
      pool.getConnection(function(err,connection){
        var cmtNo =req.params.cmtNo;
        connection.query('select * from comments where cmtNo = ?',[cmtNo],function(err,result){
-         console.log('result:'+ JSON.stringify(result));
-       var cmtPwd = result[0].cmtPwd;
-
-       var cmtDelPwd = req.params.cmtDelPwd;
-       console.log('cmtDelPwd: '+cmtDelPwd);
+       console.log('result:'+ JSON.stringify(result));
 
        var idx = result[0].cmtBrd;
        var query ='delete from comments where cmtNo=?';
        connection.query(query,[cmtNo],function(err,results){
-         console.log('cmtPwd:'+cmtPwd);
          console.log(cmtNo+ ' deleted');
          res.redirect('/work/board/read/'+idx);
          connection.release();

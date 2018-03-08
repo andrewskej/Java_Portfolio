@@ -10,7 +10,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('./config/mySQL');
 
-
+var favicon = require('serve-favicon');
+// app.use(favicon(__dirname + '/uploads/favicon.ico'));
 
 app.use(session({
    secret:'laksjdnflkasjdn',
@@ -60,6 +61,7 @@ var board = require('./router/board/board')(app,multer,upload,session,fs,path,mu
 var mall = require('./router/mall/mall')(app,multer,upload,session,fs,path,multer,upload,bodyParser);
 var chat = require('./router/chat/chat')(app,session,io,http,bodyParser);
 // var mail = require('./router/mail')(app);
+
 
 app.use('/auth/',auth);
 app.use('/work/board/',board);

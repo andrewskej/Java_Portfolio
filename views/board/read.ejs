@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title></title>
+<title>Board</title>
+<link rel="shortcut icon" href="/uploads/favicon.ico" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -15,12 +16,9 @@
       }
     })
 
-    // $('#cmtDel').click(function(){ //it only reacts to the top of the list button...
-    //     alert( $('#cmtDel').val() )
-    // //   $('#cmtDel').prepend($('#cmtDelPwd'))
-    //
-    //   //  $('#cmtDel').html($('#cmtDelSet'))
-    // })
+    $('#cmtDel').click(function(){ //it only reacts to the top of the list button...
+
+    })
 
   })
 </script>
@@ -72,55 +70,53 @@
 <%}%>
       <a href="/work/board"><input type="button" class="btn btn-default" value="back" /></a>
   </form>
-  <br />
 
 
-<!-- under construction below ..del with pwdchk is required-->
   <!-- comments -->
 <%if(results){%>
   <table>
     <h3><b>Comments</b></h3>
+    <tr>
     <% for(var i=0;i<results.length;i++){  %>
       <%  var comment = results[i];    %>
-    <!-- <tr id="<%=comment.cmtNo%>"> -->
-    <tr>
+        <br />
         <td><%=comment.cmtWriter%>   :   </td>
-        <td><%=comment.cmtTR%></td><br /><br />
+        <td><b><%=comment.cmtTR%></b></td><br />
         <td>original text: <%=comment.cmt%></td><br />
         <td><%=comment.cmtDate%></td>
-        <!-- <td><button class="btn btn-default" value="<%=comment.cmtNo%>" id="cmtDel">x</button></a></td> -->
+    <%if(comment.cmtWriter == user.username || user.username =='admin'){%>
         <td><a href="../commentDel/<%=comment.cmtNo%>"><button class="btn btn-default" id="cmtDel">x</button></a></td>
+    <%}%>
     </tr>
-    <!-- <div id="cmtDelSet">
-      <input type="text" placeholder="password" name="cmtDelPwd" value="" id="cmtDelPwd"/>
-      <button id="ctmDelBtn" class="btn btn-danger">del</button>
-    </div> -->
-    <% } %>
   </table><br />
+    <% } %>
 <% } %>
 
 
   <!-- Leave comments -->
+<br />
   <div>
     <form action="../comment/<%=rows[0].idx %>" method="post">
-
-      <input type="text" name="cmtWriter" placeholder="name" value="" required/><br /><br />
+    <%if(user.level =='user' || user.username == 'admin'){%>
+      <h3><b><%=user.username%></b></h3>
+      <!-- <span name="cmtWriter" placeholder="name" value="<%=user.username%>"/><br /> -->
       <select name="cmtlang">
-        <option value="en">
-         Default: English
-        </option>
+        <option value="en">Default: English</option>
         <option value="ko">kor</option>
         <option value="ja">jpn</option>
         <option value="zh-TW">zh-traditional</option>
         <option value="zh-CN">zh-simplified</option>
       </select><br /><br />
-      <textarea rows=5 cols=66 name="cmt" required></textarea><br />
-      <input type="password" placeholder="password" name="cmtPwd" required/>
+      <textarea rows=5 cols=66 name="cmt" placeholder="please leave your comments here" required></textarea><br />
       <input type="submit" class="btn btn-default" value="Leave Comments" /><br />
+   <%}%>
+   <%if(user.level !='user' && user.username !='admin'){%>
+     <b>please log in to leave comments  </b><button class="btn btn-default"><a href="/">login</a></button>
+   <%}%>
+
     </form><br />
   </div>
 
-<!-- under construction above-->
 
 </div>
 
