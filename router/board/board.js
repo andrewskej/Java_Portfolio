@@ -39,7 +39,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
 
 
 
-   route.get('/write', function(req,res){
+ route.get('/write', function(req,res){
      if(req.session.username){
        var username = req.session.username;
        var level = req.session.level;
@@ -203,8 +203,6 @@ route.get('/read/:idx',function(req,res){
        var cmtBrd = idx;
        var cmtWriter = req.session.username;
        var cmt = req.body.cmt;
-
-
        var cmtlang = req.body.cmtlang;
        console.log('cmtWriter:'+cmtWriter);
        console.log('cmt:'+cmt)

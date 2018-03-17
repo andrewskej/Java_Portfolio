@@ -25,8 +25,7 @@ module.exports = function(app,session,bodyParser){
           displayName:req.body.displayName
       };
       console.log(user.username);
-      console.log(user.password);
-      var query = 'insert into member (username,password) values (?,?)'
+      var query = 'insert into member (username,password) values (?,password(?))'
       connection.query(query, [user.username,user.password],function(err,result){
         if(err) {console.log(err);}
         else{
