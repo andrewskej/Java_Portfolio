@@ -9,10 +9,10 @@ module.exports = function(app,session,io,bodyParser){
     var user ={username:username,level:level}
     res.render('../views/chat/chat',{user:user});
 
-    // res.render('../views/chat/chat');
   });
 
   io.sockets.on('connection',function(socket){
+//    socket.broadcast.emit('user join');
     console.log('io connection on - a new user')
 
     socket.on('sendMSG',function(name,text){

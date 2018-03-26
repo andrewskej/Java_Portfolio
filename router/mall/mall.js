@@ -70,6 +70,8 @@ var formidable = require('formidable');
       console.log('itemNo: '+itemNo);
       var query = 'SELECT * from items WHERE ITEMNO=?'
       connection.query(query,[itemNo], function(err,rows){
+        var query2 = 'SELECT * FROM REVIEW WHERE ITEMNO=?'
+        connection.query(query2,[itemNo],function(err,reviews){
         if(err) console.log(err);
         if(req.session.username){
           var user ={username:req.session.username,level:req.session.level}
@@ -79,16 +81,51 @@ var formidable = require('formidable');
                   for(var i =0;i<results.length;i++){
                     myCart.push(results[i]);
                   }
-                  return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],user:user,myCart:myCart});
+                  return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],reviews:reviews,user:user,myCart:myCart});
                 })
               })
         }else if(!req.session.username){
-          return res.render('../views/mall/itemDetail',{rows:rows, row:rows[0],user:undefined});
+          return res.render('../views/mall/itemDetail',{rows:rows,row:rows[0],reviews:reviews,user:undefined});
         }
         connection.release();
+            });
         });
       });
     });
+
+//addreview - need to add stars
+  route.post('/addReview/:itemno', function(req,res){
+    pool.getConnection(function(err,connection){
+      var itemNo = req.params.itemno;
+      var rid = req.session.username;
+      var content = req.body.reviewContent;
+      var star;
+      console.log('itemNo: '+itemNo)
+      console.log("reviewer:"+ rid)
+      console.log("content: "+content)
+      var query = 'insert into review (itemno, rid, content) values(?,?,?)';
+      connection.query(query,[itemNo,rid,content], function(err,result){
+        console.log('You\'ve left a review!' )
+        // res.redirect('/work/mall/itemDetail/'+itemNo);
+        res.redirect('back');
+        connection.release();
+      })
+    })
+  })
+  //addreview under construction
+
+route.get('/reviewDel/:REVIEWNO',function(req,res){
+  pool.getConnection(function(err,connection){
+    var reviewNo = req.params.REVIEWNO;
+    console.log('delete: '+reviewNo)
+    var query = 'delete from review where REVIEWNO = ?'
+    connection.query(query,[reviewNo],function(err,result){
+      console.log('review deleted!')
+      res.redirect('back');
+      connection.release();
+    })
+  })
+})
 
   route.get('/giftGuide',function(req,res){
     if(req.session.username){

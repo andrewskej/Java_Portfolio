@@ -11,6 +11,8 @@
   .message{ width: 50%; }
   .chat{ width: 10%; }
 </style>
+</head>
+<body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
 var socket = io.connect();
@@ -28,7 +30,7 @@ $(document).ready(function(){
     });
 
 
- //Event: get conncted user count
+ //Event: get connected user count
     socket.on('socket_evt_chat_user',function(data){
       data = JSON.parse(data);
       userCnt = data.length;
@@ -58,8 +60,7 @@ $(document).ready(function(){
     });
 
 </script>
-</head>
-<body>
+
 <div class="container">
   <h1>ChatRoom</h1>
   <div>

@@ -2,6 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/uploads/favicon.ico" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -171,9 +172,9 @@
 	<!--    item Detail ends -->
 
 
-    <!-- Review -->
+    <!-- Write Review -->
     <div>
-    <form action="addReview/itemNo=<%=rows[0].ITEMNO%>" method="post">
+    <form action="../addReview/<%=rows[0].ITEMNO%>" method="post">
             <p class="star_rating">
                 <a href="#" id="star1">★</a>
                 <input type="hidden" value="1"  >
@@ -198,7 +199,7 @@
      <br>
      </div>
      <br>
-
+<!-- read reviews -->
      <div id="accordion" class="panel-group">
          <div class="panel panel-default">
             <div class="panel-heading">
@@ -209,29 +210,28 @@
             <div id="collapse1" class="panel-collapse collapse">
                <div id="reviewHere"></div>
 	               <div><br>
-	               <c:if test="${!empty rList }">
-	                  <c:forEach var="r" items="${rList }">
-	                        <p>Writer: ${r.rid }</p>
-	                        <p>Stars:
-	                           <c:if test="${r.star!=null}">
-	                              <c:forEach var="s" begin="1" end="${r.star}">
-	                              	    ★
-	                              </c:forEach>
-	                           </c:if>
-	                           <c:if test="${r.star==null }">
-	                          		    ☆
-	                           </c:if>
-	                        </p>
-	                        <p>${r.content }</p>
-	                        <p>${r.regdate }</p>
-	                        <c:if test="${mid == r.rid || myLevel =='Red'}">
-	                           <a href="DelR.do?reviewNo=${r.reviewNo }&itemNo=${i.itemNo}"><button name="DelReview" id="DelReivew">x</button></a>
-	                        </c:if>
-	                  </c:forEach>
-	                </c:if>
-	                <c:if test="${empty rList }">
-	                  <p> No reviews yet. Leave your first review here!</p>
-	                </c:if>
+
+			<%for(var i=0;i<reviews.length;i++){%>
+					<%	var review = reviews[i];%>
+	          <p>  Writer:<%=review.RID%></p>
+            <!-- <p>Stars:
+               <c:if test="${r.star!=null}">
+                  <c:forEach var="s" begin="1" end="${r.star}">
+                  	    ★
+                  </c:forEach>
+               </c:if>
+               <c:if test="${r.star==null }">
+              		    ☆
+               </c:if>
+            </p> -->
+            <strong><p>  <%=review.CONTENT%></p></strong>
+            <p>  <%=review.REGDATE%></p>
+		<%if(review.RID == user.username || user.username =='admin'){%>
+  			<td><a href="../reviewEdit/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewEdit">Edit</button></a></td>			
+        <td><a href="../reviewDel/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewDel">x</button></a></td>
+		<%}%>
+			<p>--------------------</p>
+				<%}%>
 	                  <br>
 	               </div>
             </div>
