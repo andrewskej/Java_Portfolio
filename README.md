@@ -1,10 +1,10 @@
 # Portfolio
 Welcome to my Portfolio!
 
-This is a refactoring/rebuilding work of my old portfolio(Java/JSP ver) using Node.js(Express).
+This is a prototype work of my backend portfolio using Node.js(Express).
 
 Running codes can be tested in : https://yousikj-node1.herokuapp.com/
 
 
-Thank you! 
+Thank you!
 andrewskej@gmail.com
