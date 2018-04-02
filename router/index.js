@@ -3,9 +3,9 @@ module.exports = function(app){
 
   app.get('/', function(req,res){
     if(req.session){
-    res.render('index',{username:req.session.username, level:req.session.level})
+    res.render('index',{username:req.session.username, level:req.session.level});
     }else{
-      res.render('index')
+      res.render('index');
     }
   });
 
@@ -14,7 +14,7 @@ module.exports = function(app){
     var username = req.session.username;
     var level = req.session.level;
     console.log('about-username:'+username);
-    var user ={username:username,level:level}
+    var user ={username:username,level:level};
     res.render('about',{user:user});
   });
 
@@ -35,18 +35,18 @@ module.exports = function(app){
     var username = req.session.username;
     var level = req.session.level;
     console.log('work-username:'+username);
-    var user ={username:username,level:level}
+    var user ={username:username,level:level};
     res.render('work',{user:user});
   });
 
   app.get('/work/a',function(req,res){
     res.render('a');
-  })
+  });
 
   app.get('/logout', function(req,res){
     req.session.destroy();
     res.send('<p>Successfully logged out!</p><br><p><a href="/">Back');
-  })
+  });
 
 
-}
+};

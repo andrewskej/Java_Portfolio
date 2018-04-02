@@ -9,13 +9,13 @@ var smtpTransport = nodemailer.createTransport({
   }
 });
 
-console.log('Mailer runs...at least')
+console.log('Mailer runs...at least');
   var mailOptions = {
     from: 'testAcct@text.works',
     to: 'andrewskej@gmail.com',
     subject:'nodeMailerTest',
     text: '<h1>TestText</h1>'
-  }
+  };
 
   smtpTransport.sendMail(mailOptions, function(err,res){
     if(err){
@@ -24,6 +24,6 @@ console.log('Mailer runs...at least')
       console.log("message sent:" +res);
     }
     smtpTransport.close();
-  })
+  });
 
-}
+};

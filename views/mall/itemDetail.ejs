@@ -101,11 +101,11 @@
            <li><a href="../../" class="glyphicon glyphicon-home"></a></li>
            <li><a href="../../mall">Mall Main</a></li>
            <li><a href="../../mall/products">All products</a></li>
-           <li><a href="../../mall/giftGuide">Gift Guide</a></li>
+           <!-- <li><a href="../../mall/giftGuide">Gift Guide</a></li> -->
          </ul>
 				 <ul class="nav navbar-nav navbar-right">
 					<%if(user && user.level != 'admin'){%>
-	 						<li><a href="myShopping.do?mid=${mid }"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
+  						<li><a href="../../mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
 	 						<li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
 	 				<%}%>
 	 				<%if(user && user.level == 'admin') {%>
@@ -227,7 +227,7 @@
             <strong><p>  <%=review.CONTENT%></p></strong>
             <p>  <%=review.REGDATE%></p>
 		<%if(review.RID == user.username || user.username =='admin'){%>
-  			<td><a href="../reviewEdit/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewEdit">Edit</button></a></td>			
+  			<td><a href="../reviewEdit/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewEdit">Edit</button></a></td>
         <td><a href="../reviewDel/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewDel">x</button></a></td>
 		<%}%>
 			<p>--------------------</p>
@@ -266,14 +266,16 @@
                      <h4>Purchase Confirmation - Direct Purchase</h4>
                   </div>
 
-                  <form action="itemPurchase.do?itemNo=${i.itemNo}" method="post">
+                  <form action="../itemPurchase/<%=rows[0].ITEMNO%>" method="post">
 	                  <div class="modal-body">
 											<table border="2" class="table table-strpied">
 												 <tr><td><h3>Item Info</h3></td></tr>
 				                  <tr><td><div>
-				                     <span name="itemNo" value="<%=rows[0].ITEMNO%>">itemNo: <%=rows[0].ITEMNO%></span><br>
-				                     <span name="itemName" value="<%=rows[0].ITEMNAME%>">itemName: <%=rows[0].ITEMNAME%></span><br>
-				                     <span name="itemPrice" id="itemPrice" value="<%=rows[0].ITEMPRICE%>">price: $ <%=rows[0].ITEMPRICE%></span><br>
+														<input type="hidden" name="itemName" value="<%=rows[0].ITEMNAME%>">
+														<input type="hidden" name="itemPrice" value="<%=rows[0].ITEMPRICE%>">
+				                     ItemNo: <span name="itemNo" value="<%=rows[0].ITEMNO%>"><%=rows[0].ITEMNO%></span><br>
+				                     ItemName: <span name="itemName" value="<%=rows[0].ITEMNAME%>"><%=rows[0].ITEMNAME%></span><br>
+				                     price: $ <span name="itemPrice" id="itemPrice" value="<%=rows[0].ITEMPRICE%>"><%=rows[0].ITEMPRICE%></span><br>
 				                  </div></td></tr>
 				                  <tr><td><p>Quantity:
 														 <select name="mQuantity" required id="mQuantity">

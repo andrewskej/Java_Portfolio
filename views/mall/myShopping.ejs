@@ -22,30 +22,35 @@
          <div class="panel panel-default">
             <div class="panel-heading">
                <h4 class="panel-title">
-            	<h3>${mid } 's shopping List</h3>
+            	<h3><strong><%=user.username%></strong> 's shopping List</h3>
                   <a data-parent="#accordion" href="#collapse1" data-toggle="collapse">View all my Shopping List</a>
                </h4>
             </div>
             <div id="collapse1" class="panel-collapse collapse">
                <div class="shoppinglist"><br>
-                  <c:forEach var="o" items="${oList }">
-                    <div class="eachItem">
-	                    <p>itemNo: 		${o.itemNo } </p>
-	                    <p><img src = "upload/${o.itemImg}" style="width:300px;"></p>
-						<p>itemName:	${o.itemName } </p>
-						<p>price:    	${o.price }</p>
-						<p>address:		${o.address } </p>
-						<p>orderNo:		${o.orderNo}  </p>
-						<p>orderDate:	${o.orderDate } </p>
-						<p>Status:		${o.status}  </p>
-					</div>
-                  </c:forEach>
-                  <br>
+
+			<%
+			for(var i=0;i<results.length;i++){
+				var order = results[i];
+			%>
+			<p><img src = "/<%=order.ITEMIMG%>" style="width:200px;"></p>
+						<p>orderNo:		<%=order.ORDERNO%></p>
+						<p>itemNo: 		<%=order.ITEMNO%> </p>
+						<p>itemName:	<%=order.ITEMNAME%> </p>
+						<p>price:    	<%=order.ITEMPRICE%></p>
+						<p>quantity:  <%=order.QUANTITY%></p>
+						<p>total:    	<%=order.TOTAL%></p>
+						<p>address:		<%=order.ADDRESS%></p>
+						<p>orderDate:	<%=order.ORDERDATE%></p>
+						<p>Status:		<%=order.STATUS%></p>
+						<p>------------------------------------------------------------------------------------</p>
+		<%	}  %>
+								  <br>
                </div>
             </div>
          </div>
 	</div>
-	<a href="mallMain.do"><button class="btn btn-default">Back</button></a>
+	<a href="../"><button class="btn btn-default">Back</button></a>
 </div>
 </body>
 </html>

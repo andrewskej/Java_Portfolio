@@ -16,8 +16,9 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
 
 
    route.get(['/','/page/:page'],function(req,res,next){
+     var page;
      if(req.params.page){
-     var page = req.params.page;
+     page = req.params.page;
      }else{
        page=1;
      }
@@ -27,9 +28,9 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
           if (err) console.error("err : " + err);
           if(req.session.username){
             var user = {username:req.session.username,
-                        level:req.session.level }
+                        level:req.session.level };
             }else{
-                user={username:null}
+                user={username:null};
             }
           res.render('../views/board/list', {title: 'Free', rows: rows, page:page, total:Object.keys(rows).length-1, each_page:10, user:user});
           connection.release();
@@ -80,7 +81,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
          //zh-CN, zh-TW, en, ja, ko
          googleTranslate.translate(content,lang,function(err,translation){
          var contentTR = translation.translatedText;
-         console.log('lang:'+lang)
+         console.log('lang:'+lang);
           var query='INSERT into board (writer,title,content,contentTR,imgsrc) values(?,?,?,?,?)';
 
           connection.query(query,[writer,title,content,contentTR,imgsrc],function(err,rows){

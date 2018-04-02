@@ -125,7 +125,7 @@ h3 {
          </ul>
 			   <ul class="nav navbar-nav navbar-right">
 						<%if(user && user.level != 'admin'){%>
-		    	     	<li><a href="myShopping.do?mid=${mid }"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
+		    	     	<li><a href="../../work/mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
 								<li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
 						<%}%>
 			  		<%if(user && user.level == 'admin') {%>

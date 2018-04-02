@@ -60,6 +60,7 @@ var auth = require('./router/auth/auth')(app,session,bodyParser);
 var board = require('./router/board/board')(app,multer,upload,session,fs,path,multer,upload,bodyParser);
 var mall = require('./router/mall/mall')(app,multer,upload,session,fs,path,multer,upload,bodyParser);
 var chat = require('./router/chat/chat')(app,session,io,http,bodyParser);
+var algo = require('./router/algo/algo')(app);
 // var mail = require('./router/mail')(app);
 
 
@@ -67,7 +68,7 @@ app.use('/auth/',auth);
 app.use('/work/board/',board);
 app.use('/work/mall',mall);
 app.use('/work/chat',chat);
-
+app.use('/work/algo',algo);
 
 var port = process.env.PORT || 3000;
 var server = http.listen(port, function(){
