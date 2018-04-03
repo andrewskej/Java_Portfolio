@@ -121,14 +121,17 @@ $(document).ready(function(){
                    <h1>Order List</h1>
                 </div>
              <div class="modal-body">
-             <c:forEach var="a" items="${aList}">
-               <p>   user: ${a.orderListName} </p>
-               <p>   orderNo: ${a.orderNo} </p>
-               <p>   Date: ${a.orderDate} </p>
-               <p>   itemName: ${a.itemName} </p>
-               <p> status: ${a.status}</p>
-               <p> ------------------ </p>
-             </c:forEach>
+      <%
+      for(var i=0;i<result.length;i++){
+        var order = result[i];
+      %>
+               <p>   user: <%=order.ORDERLISTNAME%> </p>
+               <p>   orderNo: <%=order.ORDERNO%> </p>
+               <p>   Date: <%=order.ORDERDATE%> </p>
+               <p>   itemName: <%=order.ITEMNAME%> </p>
+               <p>   status: <%=order.STATUS%></p>
+               <p> ------------------------------------ </p>
+      <%}%>
                </div>
          </div>
       </div>

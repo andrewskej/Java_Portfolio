@@ -182,7 +182,15 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
 
 // Admin Mode
   route.get('/mallAdmin',function(req,res){
-    res.render('../views/mall/mallAdmin');
+    pool.getConnection(function(err,connection){
+      var query = 'select * from orderlist order by orderdate desc';
+      connection.query(query,function(err,result){
+        if(err)console.log(err);
+        console.log(result);
+        res.render('../views/mall/mallAdmin',{result:result});
+      });
+      connection.release();
+    });
   });
 
 
