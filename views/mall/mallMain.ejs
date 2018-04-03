@@ -216,18 +216,22 @@ h3 {
 	    <br><br>
 	    <h2><b>New Arrivals</b></h2><br>
 	      <div class="row text-center">
-	         <c:forEach var="m" items="${mainList}">
+	<%
+	for(var i=0;i<3;i++){
+		var newItems = rows[i];
+		%>
 		        <div class="col-sm-4">
 		          <div class="borderdiv">
-		           <a href="itemDetail/itemNo=${m.itemNo}"><img src="upload/${m.itemImg}" class="img11" alt=""></a>
-		           <p><a href="itemDetail/itemNo=${m.itemNo}"><strong> ${m.itemName}</strong></a></p>
-		           <p>No: ${m.itemNo}</p><p>$: ${m.itemPrice}</p>
-		               <c:if test="${myLevel=='Red' }">
-		                  <a href="itemDel.do?itemNo=${m.itemNo}"><button class="btn btn-danger">x</button></a>
-		               </c:if>
-		           </div>
+
+							 <a href="/work/mall/itemDetail/<%=newItems.ITEMNO%>">
+							 <img src="/<%=newItems.ITEMIMG%>" class="img11" alt=""></a>
+		           <p><a href="/work/mall/itemDetail/<%=newItems.ITEMNO%>">
+							 <strong> <%=newItems.ITEMNAME%></strong></a></p>
+		           <p>No: <%=newItems.ITEMNO%></p>
+
+							 </div>
 		        </div>
-	         </c:forEach>
+		<%}%>
 	   	  </div>
       <br><br>
 

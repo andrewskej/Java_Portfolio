@@ -25,11 +25,15 @@ var formidable = require('formidable');
                   console.log('n:'+myCart[i].ITEMNAME);
                   console.log('p:'+myCart[i].PRICE);
                 }
-                res.render('../views/mall/mallMain',{user:user,myCart:myCart});
+
+                var query = 'select * from items order by ITEMDATE desc';
+                connection.query(query,function(err,rows){
+                res.render('../views/mall/mallMain',{user:user,myCart:myCart,rows:rows});
+                });
               });
             });
             }else{
-          res.render('../views/mall/mallMain',{user:undefined});
+          res.render('../views/mall/mallMain',{user:undefined,rows:rows});
         }
     });
 
@@ -186,8 +190,10 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
       var query = 'select * from orderlist order by orderdate desc';
       connection.query(query,function(err,result){
         if(err)console.log(err);
-        console.log(result);
-        res.render('../views/mall/mallAdmin',{result:result});
+        var query2 = 'select * from member order by username';
+          connection.query(query2,function(err,rows){
+            res.render('../views/mall/mallAdmin',{result:result,rows:rows});
+          });
       });
       connection.release();
     });
