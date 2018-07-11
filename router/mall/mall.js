@@ -286,7 +286,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
 
 
    route.get('/cartPurchase',function(req,res){
-       var items = new Array();
+       var items = [];
        items = req.body.checked;
        console.log(items);
 
