@@ -22,7 +22,7 @@ height:300px;
 }
 
 .borderdiv img{
-border:1px dashed gray;
+border:1px solid gray;
 }
 </style>
 <script type="text/javascript">
@@ -59,7 +59,6 @@ $(document).ready(function(){
            <li><a href="../../" class="glyphicon glyphicon-home"></a></li>
            <li><a href="/work/mall/">Mall Main</a></li>
            <li class="active"><a href="#">All products</a></li>
-           <!-- <li><a href="giftGuide">Gift Guide</a></li> -->
          </ul>
          <ul class="nav navbar-nav navbar-right">
            <%if(user && user.level != 'admin'){%>
@@ -81,9 +80,9 @@ $(document).ready(function(){
            <div class="modal-content">
               <div class="modal-header">
                  <button class="close" data-dismiss="modal">x</button>
-              <%if(user){ %>
-                 <h4>My Cart: <%=user.username%></h4>
-              <%}%>
+                  <%if(user){ %>
+                    <h4>My Cart: <%=user.username%></h4>
+                  <%}%>
               </div>
 
            <form action="/cartPurchase" method="get">
@@ -139,8 +138,8 @@ $(document).ready(function(){
 
 
 	<!-- Main -->
-  each page : <%=each_page%>
-  total : <%=total%>
+    items per page : <%=each_page%>
+    total : <%=total%>
    <div class="row text-center">
 
     <%
@@ -164,6 +163,7 @@ $(document).ready(function(){
 		<% }%>
 	<% }%>
 <% }%>
+</div>
       <!--  paging wip -->
       <div class="text-center">
         <ul class="pagination">
@@ -178,6 +178,5 @@ $(document).ready(function(){
 
 	<!--    Main Ends -->
 
-</div>
 </body>
 </html>

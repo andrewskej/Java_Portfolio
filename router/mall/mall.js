@@ -18,21 +18,16 @@ var formidable = require('formidable');
           var myCart=[];
             pool.getConnection(function(err,connection){
               connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
-                for(var i =0;i<results.length;i++){
-                  myCart.push(results[i]);
-                }
-                for(i=0;i<myCart.length;i++){
-                  console.log('n:'+myCart[i].ITEMNAME);
-                  console.log('p:'+myCart[i].PRICE);
-                }
-
+                results.forEach(function(item,i){
+                  myCart.push(item);
+                })
                 var query = 'select * from items order by ITEMDATE desc';
-                connection.query(query,function(err,rows){
-                res.render('../views/mall/mallMain',{user:user,myCart:myCart,rows:rows});
+                connection.query(query,function(err,items){
+                res.render('../views/mall/mallMain',{user:user,myCart:myCart,items:items});
                 });
               });
             });
-            }else{
+          }else{
           res.render('../views/mall/mallMain',{user:undefined,rows:rows});
         }
     });
@@ -121,9 +116,6 @@ route.get('/myShopping/:username',function(req,res){
       var rid = req.session.username;
       var content = req.body.reviewContent;
       var star;
-      console.log('itemNo: '+itemNo);
-      console.log("reviewer:"+ rid);
-      console.log("content: "+content);
       var query = 'insert into review (itemno, rid, content) values(?,?,?)';
       connection.query(query,[itemNo,rid,content], function(err,result){
         console.log('You\'ve left a review!' );
