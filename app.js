@@ -66,11 +66,7 @@ app.use('/work/mall',mall);
 app.use('/work/chat',chat);
 
 // var port = process.env.PORT || 3000;
-// var server = http.listen(port, function(){
-//   console.log('Server connected: ', port);
-// });
-
 var port = process.env.PORT || 80;
-var server = http.listen(port,function(){
+var server = http.listen(port, function(){
   console.log('Server connected: ', port);
-})
+});
