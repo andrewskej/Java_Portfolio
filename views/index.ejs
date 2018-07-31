@@ -2,44 +2,85 @@
 <head>
 <title>You sik Jeon Portfolio</title>
 <link rel="shortcut icon" href="/uploads/favicon.ico" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+<style>
+.index_top{position:relative; height:25%;}
+.index_top_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; bottom: 5%; left: 10%;}
+
+.index_mid{position:relative; margin-left:auto; margin-right:auto; width:80%; height:50%; border-top:1px solid gray; border-bottom:1px solid gray;}
+.index_mid_square{position:absolute; height:50%; width:20%; top:25%; left:40%; background:firebrick;}
+.index_mid_name{position:absolute; font-size:50px; font-weight:bold; top:40%; left:40%; transform:translateX(-20%); display:none;}
+
+.loginBox{margin-top:2%; display:none;}
+.accInfo{margin-top:5%; display:none;}
+.accInfo--user{margin-bottom:2%;}
+
+.index_bot{position:relative;  height:25%;}
+.index_bot_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; top: 5%; left: 10%;}
+
+
+</style>
 <div class="container">
-<%if(!username){%>
-      <h1>You sik Jeon</h1><br /><br />
-      <form action="auth/login" method="post">
-        <p>Member Login</p>
-        <input type='text' name="username" placeholder="username" /><br />
-        <input type="password" name="password" placeholder="password" />
-        <input type="submit" class="btn btn-success" value="Login" />
-      </form>
-      <p>Not a member?</p>
-        <a href="auth/register"><input type="button" class="btn btn-default" value="register" /></a>
-        <a href="/about"><input type="button" class="btn btn-danger" value="continue as a guest"/></a>
-        <br /><br />
-        <span> final test - jenkins & aws re-connect</span>
-        <h4>Test account:</h4>
-        <ul>
-          <ol>
-            <b>(Level: user)</b><br />
-            username: tester <br />
-            password: 1234
-          </ol><br />
-          <ol>
-            <b>(Level: Admin)</b><br />
-            username: admin <br />
-            password: 1234
-          </ol>
-        </ul>
-<%}%>
-<%if(username){%>
-      <h3>Logged in as: <%=username%></h3><br />
-      <a href="/logout"><input type="button" class="btn btn-danger" value="logout" /></a>
-      <a href="/about"><input type="button" class="btn btn-success" value="continue"/></a>
-<%}%>
+    <section class="index_top">
+      <div class="index_top_navbar">
+      </div>
+    </section>
+
+    <section class="index_mid">
+        <div class="index_mid_name">You sik Jeon</div>
+        <div class="index_mid_square"></div>
+        <!-- 클릭할때마다 이부분이 닫혔다가 열리게 - 내용이 변하게  -->
+
+        <div class="loginBox">
+          <form action="auth/login" method="post">
+            <span>Member Login</span>
+            <input type='text' name="username" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <input type="submit" value="Login"/>
+          </form>
+            <span>Not a member?</span>
+            <a href="auth/register"><input type="button" value="register" /></a>
+            <a href="/about"><input type="button"  value="continue as a guest"/></a>
+        </div>  
+        <div class="accInfo">
+            <span>Test account:</span>
+            <div class="accInfo--user">
+              <b>(Level: user)</b><br />
+              username: tester <br />
+              password: 1234
+            </div>
+            <div class="accInfo--admin">
+              <b>(Level: Admin)</b><br />
+              username: admin <br />
+              password: 1234
+            </div>   
+        </div> 
+    </section>
+
+    <section class="index_bot">
+      <div class="index_bot_navbar">
+      </div>
+    </section>
 </div>
+      
+<script>
+ $('.index_mid_square').on('click',function(){
+   $('.index_mid_square').hide();
+   $('.index_mid_name').show();
+   $('.index_mid').show();
+ })
+
+ $('.index_mid_name').on('click',function(){
+   $('.index_mid_name').hide();
+   $('.loginBox, .accInfo').show();
+ })
+
+</script>
+
+
+
+
 </body>
 </html>

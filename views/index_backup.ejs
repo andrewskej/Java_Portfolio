@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>You sik Jeon Portfolio</title>
+<link rel="shortcut icon" href="/uploads/favicon.ico" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<style>
+.index_top{position:relative; width:1024px; height:25%; display:none;}
+.index_mid{position:relative; width:1024px; height:40%; border-top:1px solid gray; border-bottom:1px solid gray;}
+.index_mid span{position:absolute; top:50%; left:50%; transform:translateX(50%);}
+
+.index_bot{position:relative; width:1024px; height:25%; display:none;}
+.accInfo{display:flex;}
+
+</style>
+<div class="container">
+    <section class="index_top">
+      <h1 class="index_top_title">You sik Jeon</h1>
+      <div class="loginBox">
+        <form action="auth/login" method="post">
+          <span>Member Login</span>
+          <input type='text' name="username" placeholder="username"/>
+          <input type="password" name="password" placeholder="password"/>
+          <input type="submit" value="Login"/>
+        </form>
+          <span>Not a member?</span>
+          <a href="auth/register"><input type="button" value="register" /></a>
+          <a href="/about"><input type="button"  value="continue as a guest"/></a>
+      </div>  
+    </section>
+
+    <section class="index_mid">
+        <span>You sik Jeon</span>
+    </section>
+
+    <section class="index_bot">
+      <div class="accInfo">
+          <span>Test account:</span>
+          <div class="accInfo--user">
+            <b>(Level: user)</b><br />
+            username: tester <br />
+            password: 1234
+          </div>
+          <div class="accInfo--admin">
+            <b>(Level: Admin)</b><br />
+            username: admin <br />
+            password: 1234
+          </div>   
+      </div>    
+    </section>
+</div>
+      
+
+
+<!-- <%if(username){%>
+       <h3>Logged in as: <%=username%></h3><br />
+       <a href="/logout"><input type="button" class="btn btn-danger" value="logout" /></a>
+       <a href="/about"><input type="button" class="btn btn-success" value="continue"/></a>
+  <%}%>-->
+
+
+</body>
+</html>
