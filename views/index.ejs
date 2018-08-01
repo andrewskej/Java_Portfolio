@@ -21,8 +21,8 @@
 }
 
 .index_top, .index_bot{position:relative; height:25%;}
-.index_top_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; bottom: 5%; left: 10%; border-top:3px solid gray;}
-.index_bot_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; top: 5%; left: 10%; border-bottom: 3px solid gray;}
+.index_top_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; bottom: 5%; left: 10%; border-top:7px solid gold;}
+.index_bot_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; top: 5%; left: 10%; border-bottom: 7px solid gold;}
 
 .index_mid{position:relative; margin-left:auto; margin-right:auto; width:80%; height:50%; border-top:1px solid gray; border-bottom:1px solid gray;}
 .index_mid_square{animation:square-to-circle 10s 1s infinite alternate; text-align:center; font-size:25px; color:white; position:relative; height:150px; width:150px; top:25%; left:-20%; background:firebrick;}
@@ -89,7 +89,7 @@
  $('.index_mid_name').on('click',function(){
    $('.index_mid_name').fadeOut();
    $('.index_top_navbar').animate({bottom:'-115%'},600).animate({bottom:'-230%'},800);
-   $('.index_bot_navbar').animate({top:'-115%'},600).animate({top:'-230%'},800).promise().then(function(){   $('.loginBox, .accInfo , .notAmember').show().css('display','flex');});
+   $('.index_bot_navbar').animate({top:'-115%'},600).animate({top:'-231.5%'},800).promise().then(function(){   $('.loginBox, .accInfo , .notAmember').show().css('display','flex');});
  })
 
 </script>
