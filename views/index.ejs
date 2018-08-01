@@ -6,11 +6,21 @@
 </head>
 <body>
 <style>
+
+@-webkit-keyframes square-to-circle{
+  0%  { border-radius:0 0 0 0; transform:rotate(0deg);}
+  25% { transform:rotate(90deg); opacity:0.5}
+  50% { border-radius:25%; transform:rotate(180deg);}
+  75% { transform:rotate(270deg);}
+  100%{ border-radius:50%; transform:rotate(360deg);} 
+}
+
+
 .index_top{position:relative; height:25%;}
 .index_top_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; bottom: 5%; left: 10%;}
 
 .index_mid{position:relative; margin-left:auto; margin-right:auto; width:80%; height:50%; border-top:1px solid gray; border-bottom:1px solid gray;}
-.index_mid_square{position:absolute; height:50%; width:20%; top:25%; left:40%; background:firebrick;}
+.index_mid_square{animation:square-to-circle 5s 2s infinite alternate; position:absolute; height:50%; width:20%; top:25%; left:40%; background:firebrick;}
 .index_mid_name{position:absolute; font-size:50px; font-weight:bold; top:40%; left:40%; transform:translateX(-20%); display:none;}
 
 .loginBox{margin-top:2%; display:none;}
@@ -20,8 +30,9 @@
 .index_bot{position:relative;  height:25%;}
 .index_bot_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; top: 5%; left: 10%;}
 
-
 </style>
+
+
 <div class="container">
     <section class="index_top">
       <div class="index_top_navbar">
@@ -67,13 +78,19 @@
       
 <script>
  $('.index_mid_square').on('click',function(){
-   $('.index_mid_square').hide();
-   $('.index_mid_name').show();
-   $('.index_mid').show();
+   $('.index_top_navbar').animate({bottom:'-100%'},1000).animate({bottom:'5%'},1000);
+   $('.index_bot_navbar').animate({top:'-100%'},1000).animate({top:'5%'},1000);
+  
+   $('.index_mid_square').fadeOut();
+   $('.index_mid_name').fadeIn(1500);
  })
 
  $('.index_mid_name').on('click',function(){
-   $('.index_mid_name').hide();
+   $('.index_top_navbar').animate({bottom:'-105%'},1000).animate({bottom:'-230%'},1000);
+   $('.index_bot_navbar').animate({top:'-105%'},1000).animate({top:'-230%'},1000);
+
+
+   $('.index_mid_name').fadeOut();
    $('.loginBox, .accInfo').show();
  })
 
