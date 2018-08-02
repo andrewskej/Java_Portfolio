@@ -8,29 +8,28 @@
 <style>
 
 @-webkit-keyframes square-to-circle{
-  0%  { border-radius:0%;left:0%; transform:rotate(360deg);}
-  12.5%  { border-radius:5%;left:5%; transform:rotate(0deg);}
-  25% { border-radius:15%; left:10%; transform:rotate(90deg); opacity:0.5}
-  36%  { border-radius:0%; left:25%; transform:rotate(0deg);}
-  50% { border-radius:30%; left:35%; transform:rotate(180deg);}
-  62.5%  { border-radius:15%; left:43%; transform:rotate(0deg);}
-  75% { border-radius:30%; left:57%; transform:rotate(270deg); opacity:0.5}
-  82.5%  { border-radius:40%; left:64%; transform:rotate(160deg);}
-  90%  { border-radius:50%; left:70%; transform:rotate(0deg);  opacity:0.5} 
-  100%{ border-radius:50%; left:150%; transform:rotate(360deg);} 
+  0%  { border-radius:0%; transform:rotate(0deg);opacity:1}
+  50%  { border-radius:50%;  transform:rotate(720deg);opacity:0.5}
+  100% { border-radius:0%;  transform:rotate(1080deg); opacity:0.5}
+}
+
+@-webkit-keyframes floating{
+  0%{top:41%;}
+  100%{top:38%;}
 }
 
 .index_top, .index_bot{position:relative; height:25%;}
-.index_top_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; bottom: 5%; left: 10%; border-top:7px solid gold;}
-.index_bot_navbar{position:absolute; background:firebrick; width: 80%; height: 25%; top: 5%; left: 10%; border-bottom: 7px solid gold;}
+.index_top_navbar{position:absolute; background:firebrick; width: 100%; height: 25%; bottom: 5%; border-top:7px solid gold;}
+.index_bot_navbar{position:absolute; background:firebrick; width: 100%; height: 25%; top: 5%; border-bottom: 7px solid gold;}
 
 .index_mid{position:relative; margin-left:auto; margin-right:auto; width:80%; height:50%; border-top:1px solid gray; border-bottom:1px solid gray;}
-.index_mid_square{animation:square-to-circle 10s 1s infinite alternate; text-align:center; font-size:25px; color:white; position:relative; height:150px; width:150px; top:25%; left:-20%; background:firebrick;}
+.index_mid_square{animation:floating 1s 1s infinite alternate; text-align:center; font-size:25px; color:white; position:relative; height:150px; width:150px; top:39%; left:43%; border:solid 2px gold; background:firebrick;}
+.index_mid_square:hover{animation:square-to-circle 3s 1s infinite alternate;}
 .index_mid_square span{position:absolute; top: 28%; right: 11%;}
 .index_mid_name{position:absolute; font-size:50px; font-weight:bold; top:40%; left:40%; transform:translateX(-20%); display:none;}
 
 .loginBox, .notAmember{margin-top:2%; display:none;}
-.accInfo, .accInfo--user{margin-top:5%; display:none;}
+.accInfo{margin-top:5%; display:none;}
 
 </style>
 
