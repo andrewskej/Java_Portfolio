@@ -11,24 +11,26 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
 
 var formidable = require('formidable');
 
+var myCart=[],items=[];
 
   route.get('/',function(req,res){
         if(req.session.username){
           var user = {username:req.session.username,level:req.session.level};
-          var myCart=[];
             pool.getConnection(function(err,connection){
               connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
+                
                 results.forEach(function(item,i){
                   myCart.push(item);
                 })
+
                 var query = 'select * from items order by ITEMDATE desc';
                 connection.query(query,function(err,items){
                 res.render('../views/mall/mallMain',{user:user,myCart:myCart,items:items});
                 });
               });
             });
-          }else{
-          res.render('../views/mall/mallMain',{user:undefined,rows:rows});
+        }else{
+          res.render('../views/mall/mallMain',{user:'guest',myCart:[],items:items||[]});
         }
     });
 

@@ -2,8 +2,8 @@
 <head>
 <title>Online store</title>
 <meta charset="UTF-8">
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 <link rel="shortcut icon" href="/uploads/favicon.ico" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -29,27 +29,6 @@ h3 {text-align: center;}
 <body>
 <script type="text/javascript">
 $(document).ready(function(){
-
-	$("#login-btn").click(function(){
-	    $.ajax({
-		   url:"LoginCheck.do",
-	       data: {"mid": $("#mid").val(),"pwd": $("#pwd").val()},
-	       type:"POST",
-	       dataType:"text",
-	       error:function(jqXHR){
-	          alert(jqXHR.status);
-	          alert(jqXHR.statusText);
-	       },
-	       success:function(responseData){
-	    	   alert(responseData);
-	           if(responseData=="Welcome!"){
-	                var f = document.querySelector("#loginform");
-	                   f.method="post";
-	                   f.submit();
-	             }
-	       	  }
-	      });
-	   });
 
 	$("#cartbuy").click(function(){  //to check if user clicked any checkbox in cart to proceed
 		var cartcheck = $("input:checkbox[name='cartItems']").is(":checked");
@@ -177,7 +156,7 @@ $(document).ready(function(){
 			<div class="newItems">
 				<% 
 				for(var i=0;i<4;i++){
-					var newItems = items[i];
+					var newItems = items[i]||[];
 				%>
 				<div class="newItem">
 					<a href="/work/mall/itemDetail/<%=newItems.ITEMNO%>"><img class="newItemImg" src="/<%=newItems.ITEMIMG%>" alt=""></a><br>

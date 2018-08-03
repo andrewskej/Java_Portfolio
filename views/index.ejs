@@ -2,6 +2,7 @@
 <head>
 <title>You sik Jeon Portfolio</title>
 <link rel="shortcut icon" href="/uploads/favicon.ico" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
@@ -18,6 +19,9 @@
   100%{top:38%;}
 }
 
+
+@media screen and (min-width:600px){}
+
 .index_top, .index_bot{position:relative; height:25%;}
 .index_top_navbar{position:absolute; background:firebrick; width: 100%; height: 25%; bottom: 5%; border-top:7px solid gold;}
 .index_bot_navbar{position:absolute; background:firebrick; width: 100%; height: 25%; top: 5%; border-bottom: 7px solid gold;}
@@ -30,6 +34,12 @@
 
 .loginBox, .notAmember{margin-top:2%; display:none;}
 .accInfo{margin-top:5%; display:none;}
+
+@media screen and (max-width:599px){
+  .index_mid_name{top:18%; left:33%;}
+  .index_mid_square{animation:floating 1s 1s infinite alternate; text-align:center; font-size:25px; color:white; position:relative; height:150px; width:150px; top:39%; left:23%; border:solid 2px gold; background:firebrick;}
+
+}
 
 </style>
 
