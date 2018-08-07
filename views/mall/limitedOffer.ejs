@@ -1,0 +1,24 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+limited offer
+<section class="countdown">
+    <div class="countdown_clock"></div>
+</section>
+
+<script>
+$(function(){
+ 
+    setInterval(timeCounter,1000)
+
+})
+
+
+function timeCounter(){
+    var today = new Date();
+    $('.countdown_clock').html(today)
+}
+
+</script>
+
+</html>

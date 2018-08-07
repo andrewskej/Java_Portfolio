@@ -1,5 +1,5 @@
 module.exports = function(app,session,fs,path,multer,upload,bodyParser){
-  var route = require('express').Router();
+  var router = require('express').Router();
   var mysql = require('mysql');
   var pool = mysql.createPool({
       connectionLimit: 10,
@@ -13,61 +13,70 @@ var formidable = require('formidable');
 
 var myCart=[],items=[];
 
-  route.get('/',function(req,res){
-        if(req.session.username){
-          var user = {username:req.session.username,level:req.session.level};
-            pool.getConnection(function(err,connection){
-              connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
-                
-                results.forEach(function(item,i){
-                  myCart.push(item);
-                })
+router.get('/',mallSet);
+router.get(['/products/','/products/:page'], showProducts);
+router.get('/limited/', limitedOffer);
+router.get('/myShopping/:username', myShopping);
+router.get('/itemDetail/:itemNo', itemDetail)
+router.post('/addReview/:itemno', addReview)
 
-                var query = 'select * from items order by ITEMDATE desc';
-                connection.query(query,function(err,items){
-                res.render('../views/mall/mallMain',{user:user,myCart:myCart,items:items});
+
+
+
+  function mallSet(req,res){
+    if(req.session.username){
+      var user = {username:req.session.username,level:req.session.level};
+        pool.getConnection(function(err,connection){
+          connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
+            results.forEach(function(item,i){
+              myCart.push(item);
+            })
+            var query = 'select * from items order by ITEMDATE desc';
+            connection.query(query,function(err,items){
+            res.render('../views/mall/mallMain',{user:user,myCart:myCart,items:items});
+            });
+          });
+        });
+    }else{
+      res.render('../views/mall/mallMain',{user:'guest',myCart:[],items:items||[]});
+    }
+  };
+
+
+
+  function showProducts(req,res){
+      var page;
+      if(req.params.page){
+      page = req.params.page;
+      }else{
+      page=1;
+      }
+      console.log("loading " + page + " page...");
+      pool.getConnection(function(err,connection){
+        connection.query("SELECT * from items", function(err,rows){
+          if(err) console.log("err : "+err);
+          if(req.session.username){
+            var user ={username:req.session.username,level:req.session.level};
+            var myCart = [];
+              pool.getConnection(function(err,connection){
+                connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
+                  for(var i =0;i<results.length;i++){
+                    myCart.push(results[i]);
+                  }
+                  console.log(rows);
+                  res.render('../views/mall/products',{title:'mall', rows:rows, page:page, total:Object.keys(rows).length-1, each_page:9, user:user, myCart:myCart});
                 });
               });
-            });
-        }else{
-          res.render('../views/mall/mallMain',{user:'guest',myCart:[],items:items||[]});
-        }
-    });
-
-
-  route.get(['/products/','/products/:page'],function(req,res){
-    var page;
-    if(req.params.page){
-    page = req.params.page;
-    }else{
-    page=1;
-    }
-    console.log("loading " + page + " page...");
-    pool.getConnection(function(err,connection){
-      connection.query("SELECT * from items", function(err,rows){
-        if(err) console.log("err : "+err);
-        if(req.session.username){
-          var user ={username:req.session.username,level:req.session.level};
-          var myCart = [];
-            pool.getConnection(function(err,connection){
-              connection.query('SELECT * FROM myCart WHERE CARTNAME=?',[req.session.username],function(err,results){
-                for(var i =0;i<results.length;i++){
-                  myCart.push(results[i]);
-                }
-                console.log(rows);
-                res.render('../views/mall/products',{title:'mall', rows:rows, page:page, total:Object.keys(rows).length-1, each_page:9, user:user, myCart:myCart});
-              });
-            });
-        }else{
-          res.render('../views/mall/products',{title:'mall', rows:rows, page:page, total:Object.keys(rows).length-1, each_page:9, user:undefined});
-        }
-        connection.release();
+          }else{
+            res.render('../views/mall/products',{title:'mall', rows:rows, page:page, total:Object.keys(rows).length-1, each_page:9, user:undefined});
+          }
+          connection.release();
+        });
       });
-    });
-  });
+    };
 
 
-route.get('/myShopping/:username',function(req,res){
+  function myShopping(req,res){
     pool.getConnection(function(err,connection){
       var user = {username:req.session.username};
       // var query = 'select * from orderlist where orderlistname =?';
@@ -79,10 +88,10 @@ route.get('/myShopping/:username',function(req,res){
         });
         connection.release();
       });
-    });
+    };
 
 
-  route.get('/itemDetail/:itemNo',function(req,res){
+  function itemDetail(req,res){
     pool.getConnection(function(err,connection){
       var itemNo = req.params.itemNo;
       console.log('itemNo: '+itemNo);
@@ -103,16 +112,16 @@ route.get('/myShopping/:username',function(req,res){
                 });
               });
         }else if(!req.session.username){
-          return res.render('../views/mall/itemDetail',{rows:rows,row:rows[0],reviews:reviews,user:undefined});
+          return res.render('../views/mall/itemDetail',{rows:rows,row:rows[0],reviews:reviews,user:'guest'});
         }
         connection.release();
             });
         });
       });
-    });
+    };
 
 //addreview - need to add stars
-  route.post('/addReview/:itemno', function(req,res){
+  function addReview(req,res){
     pool.getConnection(function(err,connection){
       var itemNo = req.params.itemno;
       var rid = req.session.username;
@@ -126,10 +135,10 @@ route.get('/myShopping/:username',function(req,res){
         connection.release();
       });
     });
-  });
+  };
   //addreview under construction
 
-route.post('/itemPurchase/:itemno',function(req,res){
+router.post('/itemPurchase/:itemno',function(req,res){
   pool.getConnection(function(err,connection){
     var orderlistname = req.session.username;
     var address = req.body.address;
@@ -163,7 +172,7 @@ route.post('/itemPurchase/:itemno',function(req,res){
 });
 
 
-route.get('/reviewDel/:REVIEWNO',function(req,res){
+router.get('/reviewDel/:REVIEWNO',function(req,res){
   pool.getConnection(function(err,connection){
     var reviewNo = req.params.REVIEWNO;
     console.log('delete: '+reviewNo);
@@ -179,7 +188,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
 
 
 // Admin Mode
-  route.get('/mallAdmin',function(req,res){
+  router.get('/mallAdmin',function(req,res){
     pool.getConnection(function(err,connection){
       var query = 'select * from orderlist order by orderdate desc';
       connection.query(query,function(err,result){
@@ -194,7 +203,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
   });
 
 
-  route.post('/itemUp',function(req,res){
+  router.post('/itemUp',function(req,res){
     pool.getConnection(function(err,connection){
       var form = new formidable.IncomingForm();
           form.uploadDir = './uploads/mall';
@@ -219,7 +228,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
 });
 });
 
-   route.get('/itemDel/:ITEMNO',function(req,res){
+   router.get('/itemDel/:ITEMNO',function(req,res){
      var itemNo = req.params.ITEMNO;
      console.log('itemNo: ' + itemNo);
      pool.getConnection(function(err,connection){
@@ -233,7 +242,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
 
 
    //cart
-   route.get('/toCart/:ITEMNO',function(req,res){
+   router.get('/toCart/:ITEMNO',function(req,res){
      var itemNo = req.params.ITEMNO;
      console.log('itemToCart:'+itemNo);
      pool.getConnection(function(err,connection){
@@ -265,7 +274,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
  });
 
 
-   route.get('/delCart/:ITEMNO',function(req,res){
+   router.get('/delCart/:ITEMNO',function(req,res){
      var itemNo = req.params.ITEMNO;
      console.log("CartItemDel: " +itemNo);
      pool.getConnection(function(err,connection){
@@ -279,7 +288,7 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
    });
 
 
-   route.get('/cartPurchase',function(req,res){
+   router.get('/cartPurchase',function(req,res){
        var items = [];
        items = req.body.checked;
        console.log(items);
@@ -290,6 +299,11 @@ route.get('/reviewDel/:REVIEWNO',function(req,res){
   });
 
 
-return route;
+
+  function limitedOffer(req,res){
+    res.render('../views/mall/limitedOffer')
+  }
+
+return router;
 
 };
