@@ -1,7 +1,8 @@
 module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,bodyParser){
-  var route = require('express').Router();
+  var router = require('express').Router();
   var mysql = require('mysql');
   var googleTranslate = require('google-translate')('AIzaSyCrGa9ekWOTGSlQqtCO9tL_Un_K2N-09Ak');
+  var formidable = require('formidable');
   var pool = mysql.createPool({
       connectionLimit: 10,
       host :'us-cdbr-iron-east-05.cleardb.net',
@@ -10,17 +11,26 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
       database:'heroku_f42423e25f73df6',
       migrate:'safe'
   });
+  
+  router.get(['/','/page/:page'],boardMain)
+  router.get('/write', writePage)
+  router.post('/write',writePost)
+  router.get('/read/:idx',read)
+  router.post('/search',search)
+  router.get('/edit/:idx', editPage)
+  router.post('/edit/',editPost)
+  router.post('/del/',del)
+  router.post('/comment/:idx', commentWrite)
+  router.get('/commentDel/:cmtNo',commentDel)
+  
 
-  var formidable = require('formidable');
 
-
-
-   route.get(['/','/page/:page'],function(req,res,next){
+  function boardMain(req,res,next){
      var page;
      if(req.params.page){
-     page = req.params.page;
+      page = req.params.page;
      }else{
-       page=1;
+      page=1;
      }
      console.log("loading "+page+" page...");
      pool.getConnection(function (err, connection) {
@@ -36,11 +46,11 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
           connection.release();
           });
        });
-   });
+   };
 
 
 
- route.get('/write', function(req,res){
+ function writePage(req,res){
      if(req.session.username){
        var username = req.session.username;
        var level = req.session.level;
@@ -50,10 +60,10 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
      }
      console.log(username,level);
      res.render('../views/board/write',{username:username,level:level});
-   });
+   };
 
 
- route.post('/write',function(req,res){
+ function writePost(req,res){
    pool.getConnection(function(err,connection){
      var form = new formidable.IncomingForm();
          form.uploadDir = './uploads/board';
@@ -63,10 +73,10 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
             console.log('fields: ' + JSON.stringify(fields));
             console.log('files: ' + JSON.stringify(files));
          var title = fields.title;
-         var imgsrc,writer;
+         var imgsrc,writer, level;
           if(req.session.username){
             writer = req.session.username;
-            var level = req.session.level;
+            level = req.session.level;
           }else{
             writer = fields.writer;
             level = "";
@@ -89,16 +99,14 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
           res.redirect('/work/board/');
           connection.release();
           });
-
         });
-
       });
    });
-});
+  };
 
 
 
-route.get('/read/:idx',function(req,res){
+function read(req,res){
   pool.getConnection(function(err,connection){
   var idx = req.params.idx;
   hitUp(idx);
@@ -117,9 +125,9 @@ route.get('/read/:idx',function(req,res){
       });
       connection.release();
     });
- });
+ };
 
-    function hitUp(idx){
+  function hitUp(idx){
       pool.getConnection(function(err,connection){
       console.log('hitup idx: '+idx);
        var query2 = 'update board set hit=hit+1 where idx=?'
@@ -129,7 +137,7 @@ route.get('/read/:idx',function(req,res){
     };
 
 
-    route.post('/search',function(req,res){
+  function search(req,res){
       var keyword = req.body.search;
       if(req.session.username){
         var user = {username: req.session.username, level:req.session.level}
@@ -152,11 +160,11 @@ route.get('/read/:idx',function(req,res){
         }
       })
     })
-  })
+  }
 
 
 
-   route.get('/edit/:idx', function(req,res){
+  function editPage(req,res){
      pool.getConnection(function(err,connection){
        var idx = req.params.idx;
        var query = 'SELECT * from board WHERE idx=?'
@@ -166,9 +174,9 @@ route.get('/read/:idx',function(req,res){
          connection.release();
        });
      });
-   });
+   };
 
-   route.post('/edit/',function(req,res){
+   function editPost(req,res){
      pool.getConnection(function(err,connection){
        var idx = req.body.idx;
        var title = req.body.title;
@@ -181,24 +189,21 @@ route.get('/read/:idx',function(req,res){
          connection.release();
        });
      });
-   });
+   };
 
-   route.post('/del/',function(req,res){
+   function del(req,res){
      pool.getConnection(function(err,connection){
        var idx = req.body.idx;
        var query = "Delete from board where idx=?"
        connection.query(query,[idx],function(err,rows){
-         if(err)console.log(err);
-         else{
-         console.log('----deleted----');
-         res.redirect('/work/board');
-         connection.release();
-         }
+       console.log('----deleted----');
+       res.redirect('/work/board');
+       connection.release();
        })
      })
-   })
+   }
 
-   route.post('/comment/:idx', function(req,res){
+   function commentWrite(req,res){
      pool.getConnection(function(err,connection){
        var idx = req.params.idx;
        var cmtBrd = idx;
@@ -221,15 +226,12 @@ route.get('/read/:idx',function(req,res){
      })
 
      })
-   })
+   }
 
-   route.get('/commentDel/:cmtNo',function(req,res){
-     console.log('commentDel Runs')
+   function commentDel(req,res){
      pool.getConnection(function(err,connection){
        var cmtNo =req.params.cmtNo;
        connection.query('select * from comments where cmtNo = ?',[cmtNo],function(err,result){
-       console.log('result:'+ JSON.stringify(result));
-
        var idx = result[0].cmtBrd;
        var query ='delete from comments where cmtNo=?';
        connection.query(query,[cmtNo],function(err,results){
@@ -239,7 +241,7 @@ route.get('/read/:idx',function(req,res){
        })
      })
    })
- })
+ }
 
-return route;
+return router;
 }

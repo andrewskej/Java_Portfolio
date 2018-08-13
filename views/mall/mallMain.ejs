@@ -96,13 +96,13 @@ $(document).ready(function(){
 						<%if(myCart){%>
 							<% for(var i=0;i<myCart.length;i++){ %>
 							<div class="row" style="float:left; width:33%; margin:auto;">
-							<input type="checkbox" id="<%=myCart[i].ITEMNO%>" name="cartItems" value="<%=myCart[i].ITEMNO%>">
-							<label for="<%=myCart[i].ITEMNO%>">itemNo: <%=myCart[i].ITEMNO%></label>
-							<p>itemName: <%=myCart[i].ITEMNAME%></p>
-							<p>Price($): <%=myCart[i].PRICE%></p>
-							<p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
-							<a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
-							<p>----------------------------------------</p>
+								<input type="checkbox" id="<%=myCart[i].ITEMNO%>" name="cartItems" value="<%=myCart[i].ITEMNO%>">
+								<label for="<%=myCart[i].ITEMNO%>">itemNo: <%=myCart[i].ITEMNO%></label>
+								<p>itemName: <%=myCart[i].ITEMNAME%></p>
+								<p>Price($): <%=myCart[i].PRICE%></p>
+								<p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
+								<a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
+								<p>----------------------------------------</p>
 							</div>
 						<% } %>
 					<% } %>

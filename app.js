@@ -53,20 +53,20 @@ app.use("/uploads/mall", express.static(__dirname + '/uploads/mall'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var router = require('./router/index')(app,mysql);
 var auth = require('./router/auth/auth')(app,session,bodyParser);
 var board = require('./router/board/board')(app,multer,upload,session,fs,path,multer,upload,bodyParser);
 var mall = require('./router/mall/mall')(app,multer,upload,session,fs,path,multer,upload,bodyParser);
 var chat = require('./router/chat/chat')(app,session,io,http,bodyParser);
 // var mail = require('./router/mail')(app);
 
+
+app.use('/', require('./router/index')(app))
 app.use('/auth/',auth);
 app.use('/work/board/',board);
 app.use('/work/mall',mall);
 app.use('/work/chat',chat);
 
 var port = process.env.PORT || 3000;
-// var port = process.env.PORT || 80;
 var server = http.listen(port, function(){
   console.log('Server connected: ', port);
 });

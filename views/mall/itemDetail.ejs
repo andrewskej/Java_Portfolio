@@ -128,7 +128,7 @@
 
 	 				<form action="cartPurchase" method="get">
 	 					 <div class="modal-body">
-	 							<% if(!myCart){ %>
+	 							<% if(myCart.length==0){ %>
 	 									<h3>Your cart is Empty!</h3>
 	 							<% } %>
 	 							<%if(myCart){%>
@@ -142,8 +142,8 @@
 	 											 <a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
 	 											 <p>----------------------------------------</p>
 	 										</div>
-	 									<% } %>
-	 								<% } %>
+									<% } %>
+								<% } %>
 	 					 <div class="modal-footer">
 	 						 <%if(myCart){%>
 	 							 <p> <%=myCart.length %> Item(s)</p>
