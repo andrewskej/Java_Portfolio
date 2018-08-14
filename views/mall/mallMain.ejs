@@ -7,15 +7,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
 <style>
 .navbar {margin-bottom: 50px; border-radius: 0;}
-.jumbotron {margin-bottom: 0;}
-footer {background-color: #f2f2f2;padding: 25px;}
 .modal {text-align: center;}
-
-.modal-dialog {display: inline-block;text-align: left;vertical-align: middle;}
-.div1 {text-align: right;}
-h3 {text-align: center;}
+.modal-dialog {display: inline-block; text-align: left;vertical-align: middle;}
 
 .newItems{position:relative; width: 100%; height: 10%; left: 50%; transform: translateX(-50%);}
 .newItem{position: absolute; width: 25%;}
@@ -25,139 +22,71 @@ h3 {text-align: center;}
 .newItem:nth-child(3){left:75%;}
 
 </style>
-</head>
 <body>
 <script type="text/javascript">
-$(document).ready(function(){
 
-	$("#cartbuy").click(function(){  //to check if user clicked any checkbox in cart to proceed
-		var cartcheck = $("input:checkbox[name='cartItems']").is(":checked");
-		if (cartcheck == false){
-			alert("Please choose at least one item to proceed")
-			return false;
-		}
+	$(function(){
+		$("#cartbuy").click(function(){ 
+			var cartcheck = $("input:checkbox[name='cartItems']").is(":checked");
+			if (cartcheck == false){
+				alert("Please choose at least one item to proceed")
+				return false;
+			}
+		});
 	});
 
-
-});
 </script>
 
 <div class="container">
 
-	<% if(user){ %>
+	<% if(user && user !='guest'){ %>
 		<h3>welcome <b> <%=user.username%> </b>!</h3>
 		<h3> <b>Level: <%=user.level%> </b></h3>
 	<% }%>
 
-	<% if(!user){ %>
-		<h3>welcome <b> guest </b>!</h3>
-		<h3>please login to use cart</h3>
-	<% }%>
 
-   <h1><span class="glyphicon glyphicon-shopping-cart"></span> Online Store </h1><br>
-
-	 <nav class="navbar navbar-inverse">
-       <div class="collapse navbar-collapse" id="myNavbar">
-         <ul class="nav navbar-nav">
-           <li><a href="../" class="glyphicon glyphicon-home"></a></li>
-           <li class="active"><a href="#">Mall Main</a></li>
-           <li><a href="../../work/mall/products/">All products</a></li>
-		   <li><a href="../../work/mall/limited/">limited offer</a></li>
-         </ul>
-  		 <ul class="nav navbar-nav navbar-right">
-			<%if(user && user.level != 'admin'){%>
-				<li><a href="../../work/mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
-				<li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
-			<%}%>
-			<%if(user && user.level == 'admin') {%>
-				<li><a href="#"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
-				<li><a href="../../work/mall/mallAdmin"><span class="glyphicon glyphicon-warning-sign"></span>Admin Mode</a></li>
-			<%}%>
-		</ul>
-  	  </div>
-   </nav>
-
-	<!--   Cart -->
-    <div id="modal1" class="modal">
-       <div class="modal-dialog lg">
-          <div class="modal-content">
-             <div class="modal-header">
-                <button class="close" data-dismiss="modal">x</button>
-				<%if(user){ %>
-					<h4>My Cart: <%=user.username%></h4>
-				<% } %>
-			</div>
-	          <form action="cartPurchase" method="get">
-    	         <div class="modal-body">
-					<%if(user){ %>
-						<% if(!myCart){ %>
-							<h3>Your cart is Empty!</h3>
-						<% } %>
-						<%if(myCart){%>
-							<% for(var i=0;i<myCart.length;i++){ %>
-							<div class="row" style="float:left; width:33%; margin:auto;">
-								<input type="checkbox" id="<%=myCart[i].ITEMNO%>" name="cartItems" value="<%=myCart[i].ITEMNO%>">
-								<label for="<%=myCart[i].ITEMNO%>">itemNo: <%=myCart[i].ITEMNO%></label>
-								<p>itemName: <%=myCart[i].ITEMNAME%></p>
-								<p>Price($): <%=myCart[i].PRICE%></p>
-								<p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
-								<a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
-								<p>----------------------------------------</p>
-							</div>
-						<% } %>
-					<% } %>
-				<% } %>
-             <div class="modal-footer">
-						 <%if(user){ %>
-							 <%if(myCart){%>
-								 <p> <%=myCart.length %> Item(s)</p>
-             			<input type="submit" class="btn btn-success" id="cartbuy" value="checkout">
-								<%}%>
-							<% } %>
-             			</div>
-					 </div>
-						</form>
-						</div>
-					</div>
-				</div>
-	<!-- cart ends -->
-
-	// replace it with swiper-slider
-   	<!-- Carousel -->
-   	<h2><b>Hot Deals</b></h2>
-     <div class="carousel slide" id="mycarousel" data-ride="carousel">
-			<ol class="carousel-indicators">
-				<li class="active" data-target="#myCarousel" data-slide-to="0"></li>
-				<li data-target="#myCarousel" data-slide-to="1"></li>
-				<li data-target="#myCarousel" data-slide-to="2"></li>
-			</ol>
-			<div class="carousel-inner" id="img">
-				<div class="item active">
-						<a href="../../work/mall/products"><img alt="" src="/uploads/mall/Seoul.jpg" width="1200" height="150px"></a>
-				</div>
-				<div class="item">
-						<a href="../../work/mall/products"><img alt="" src="/uploads/mall/Japan.jpg" width="1200" height="150px"></a>
-				</div>
-				<div class="item">
-						<a href="../../work/mall/products"><img alt="" src="/uploads/mall/Shanghai.jpg" width="1200" height="150px"></a>
-				</div>
-			</div>
-			<a class="left carousel-control" href="#mycarousel" data-slide="prev">
-				<span class="glyphicon glyphicon-chevron-left"></span>
-			</a>
-			<a class="right carousel-control" href="#mycarousel" data-slide="next">
-				<span class="glyphicon glyphicon-chevron-right"></span>
-			</a>
+	<h1>
+		<span class="glyphicon glyphicon-shopping-cart"></span> Online Store 
+	</h1>
+	<nav class="navbar navbar-inverse">
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li><a href="../" class="glyphicon glyphicon-home"></a></li>
+				<li class="active"><a href="#">Mall Main</a></li>
+				<li><a href="../../work/mall/products/">All products</a></li>
+				<li><a href="../../work/mall/limited/">Limited offer</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<%if(user && user.level != 'admin'){%>
+					<li><a href="../../work/mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
+					<li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
+				<%}%>
+				<%if(user && user.level == 'admin') {%>
+					<li><a href="#"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
+					<li><a href="../../work/mall/mallAdmin"><span class="glyphicon glyphicon-warning-sign"></span>Admin Mode</a></li>
+				<%}%>
+			</ul>
 		</div>
-	<!-- Carousel Ends -->
+	</nav>
 
-	    <br><br>
-	    <h2><b>New Arrivals</b></h2><br>
-	      <div class="row text-center">
+
+
+	   	<!-- insert Carousel or swiper-slide or parallax scroll here-->
+   		<h2><b>Hot Deals</b></h2>
+   
+
+
+   		<h2><b>Limited offer</b></h2>
+
+
+
+
+		<h2><b>New Arrivals</b></h2>
+		<div class="row text-center">
 			<div class="newItems">
 				<% 
 				for(var i=0;i<4;i++){
-					var newItems = items[i]||[];
+				var newItems = items[i]||[];
 				%>
 				<div class="newItem">
 					<a href="/work/mall/itemDetail/<%=newItems.ITEMNO%>"><img class="newItemImg" src="/<%=newItems.ITEMIMG%>" alt=""></a><br>
@@ -165,8 +94,62 @@ $(document).ready(function(){
 				</div>
 				<%}%>
 			</div>
-	   	  </div>
+		</div>
 	
+
+
+
+
+	<!--   Cart -->
+	<div id="modal1" class="modal">
+			<div class="modal-dialog lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal">x</button>
+						<%if (user){ %>
+						<h4>My Cart: <%=user.username%></h4>
+						<% } %>
+					</div>
+					<form action="cartPurchase" method="get">
+						<div class="modal-body">
+							<%if (user) { %>
+								<% if (!myCart) { %>
+									<h3>Your cart is Empty!</h3>
+								<% } %>
+								<% if (myCart) {%>
+									<% for(var i=0;i<myCart.length;i++){ %>
+										<div class="row" style="float:left; width:33%; margin:auto;">
+											<input type="checkbox" id="<%=myCart[i].ITEMNO%>" name="cartItems" value="<%=myCart[i].ITEMNO%>">
+											<label for="<%=myCart[i].ITEMNO%>">itemNo: <%=myCart[i].ITEMNO%></label>
+											<p>itemName: <%=myCart[i].ITEMNAME%></p>
+											<p>Price($): <%=myCart[i].PRICE%></p>
+											<p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
+											<a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
+											<p>----------------------------------------</p>
+										</div>
+									<% } %>
+								<% } %>
+							<% } %>
+						</div>
+						<div class="modal-footer">
+							<%if(user){ %>
+								<%if(myCart){%>
+									<p> <%=myCart.length %> Item(s)</p>
+									<input type="submit" class="btn btn-success" id="cartbuy" value="checkout">
+								<% } %>
+							<% } %>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- cart ends -->
+
+
+
 	</div>
 </body>
+
+
+
 </html>

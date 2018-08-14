@@ -7,38 +7,27 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
 <style>
-.div1{
-text-align: right;
-}
+.div1{ text-align: right; }
+.img11{ width:300px; height:300px; }
+.borderdiv img{ border:1px solid gray; }
 
-h3{
-text-align: center;
-}
-
-.img11{
-width:300px;
-height:300px;
-}
-
-.borderdiv img{
-border:1px solid gray;
-}
 </style>
 <script type="text/javascript">
 
-$(document).ready(function(){
-	$("#cartbuy").click(function(){
-		var cartcheck = $("input:checkbox[name='cartItems']").is(":checked");
-		if (cartcheck == false){
-			alert("Please choose at least one item to proceed")
-			return false;
-		}
-	});
-});
+  $(function(){
+    $("#cartbuy").click(function(){
+      var cartcheck = $("input:checkbox[name='cartItems']").is(":checked");
+      if (cartcheck == false){
+        alert("Please choose at least one item to proceed")
+        return false;
+      }
+    });
+  });
 
 </script>
-</head>
 <body>
 <div class="container">
 
@@ -49,7 +38,7 @@ $(document).ready(function(){
 
 	<% if(!user){ %>
 		<h3>welcome <b> guest </b>!</h3>
-		<h3>Logging in allows you to use cart</h3>
+		<h3>Please log in to use cart</h3>
 	<% }%>
 
 	<h1><span class="glyphicon glyphicon-globe"></span><strong> All Products</strong></h1><br>
@@ -59,14 +48,15 @@ $(document).ready(function(){
            <li><a href="../../" class="glyphicon glyphicon-home"></a></li>
            <li><a href="/work/mall/">Mall Main</a></li>
            <li class="active"><a href="#">All products</a></li>
+           <li><a href="/work/mall/limited">Limited Offer</a></li>
          </ul>
          <ul class="nav navbar-nav navbar-right">
-           <%if(user && user.level != 'admin'){%>
+           <%if (user && user.level != 'admin') {%>
 							 <li><a href="../../mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
                <li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
            <%}%>
 
-           <%if(user && user.level == 'admin') {%>
+           <%if (user && user.level == 'admin') {%>
                <li><a href="#"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
                <li><a href="../../work/mall/mallAdmin"><span class="glyphicon glyphicon-warning-sign"></span>Admin Mode</a></li>
            <%}%>
@@ -128,9 +118,9 @@ $(document).ready(function(){
 	<div class="row text-center">
 		<div  class="col-sm-12">
 		   	<form class="navbar-form pull-right" action="allProducts.do?q="+${q} method="get">
-				<input type="text" class="span2" name="q" value="${q}" placeholder="keyword" style="width:240px">
-				<input type="submit" class="btn" value="search" style=margin:35px/>
-			</form>
+          <input type="text" class="span2" name="q" value="${q}" placeholder="keyword" style="width:240px">
+          <input type="submit" class="btn" value="search" style=margin:35px/>
+			  </form>
 			<span></span><br><br>
 		</div>
 	</div>
@@ -142,41 +132,41 @@ $(document).ready(function(){
     total : <%=total%>
    <div class="row text-center">
 
-    <%
-    if(rows){
-     for(var i=(page*each_page)-each_page; i<page*each_page;i++){
-    if(i>total){
-      i++;
-    }else{
-       var item = rows[i];
-       %>
+    <% if (rows) {
+      for(var i=(page*each_page)-each_page; i<page*each_page;i++){
+        if(i > total){
+          i++;
+        }else{
+         var item = rows[i];
+    %>
 		  <div class="col-sm-4">
 		    <div class="borderdiv">
          <a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><img src="/<%=item.ITEMIMG%>" class="img11" alt=""></a>
-		     <p><a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><strong>    <%=item.ITEMNAME%> </strong></a></p>
-		     <p>No:<%=item.ITEMNO%></p><p>$: <%=item.ITEMPRICE%></p>
-				<%if(user && user.level=='admin'){ %>
-					<p><a href ="/work/mall/itemDel/<%=item.ITEMNO%>"><button class="btn btn-danger">x</button></a></p>
-				<% } %>
-			</div>
-		</div>
-		<% }%>
-	<% }%>
-<% }%>
-</div>
-      <!--  paging wip -->
-      <div class="text-center">
-        <ul class="pagination">
-          <% for(var j=0;j<(rows.length/9);j++){  %>
-          <li><a href="/work/mall/products/<%=j+1%>"><%=j+1%></a></li>
+		     <p><a href="/work/mall/itemDetail/<%=item.ITEMNO%>"><strong><%=item.ITEMNAME%></strong></a></p>
+		     <p>No:<%=item.ITEMNO%></p>
+         <p>$: <%=item.ITEMPRICE%></p>
+          <%if(user && user.level=='admin'){ %>
+            <p><a href ="/work/mall/itemDel/<%=item.ITEMNO%>"><button class="btn btn-danger">x</button></a></p>
           <% } %>
-          <br /><br />    <%=page%> / <%= Math.ceil(rows.length/9)%> page
-        </ul>
+			  </div>
       </div>
-      <!--  paging ends -->
+		<% } %>
+	<% } %>
+<% } %>
+</div>
+
+<!--  paging wip -->
+<div class="text-center">
+  <ul class="pagination">
+    <% for(var j=0;j<(rows.length/9);j++){  %>
+    <li><a href="/work/mall/products/<%=j+1%>"><%=j+1%></a></li>
+    <% } %>
+  <br /><br />    <%=page%> / <%= Math.ceil(rows.length/9)%> page
+  </ul>
+</div>
+<!--  paging ends -->
 
 
-	<!--    Main Ends -->
 
 </body>
 </html>

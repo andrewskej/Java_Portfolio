@@ -2,6 +2,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
   var router = require('express').Router();
   var mysql = require('mysql');
   var googleTranslate = require('google-translate')('AIzaSyCrGa9ekWOTGSlQqtCO9tL_Un_K2N-09Ak');
+
   var formidable = require('formidable');
   var pool = mysql.createPool({
       connectionLimit: 10,
