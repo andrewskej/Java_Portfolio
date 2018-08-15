@@ -193,7 +193,7 @@ router.get('/delCart/:itemno', delCart)
 
 
 // Admin Mode
-  function mallAdmin(){
+  function mallAdmin(req,res){
     pool.getConnection(function(err,connection){
       var query = 'select * from orderlist order by orderdate desc';
       connection.query(query,function(err,result){
@@ -232,14 +232,14 @@ router.get('/delCart/:itemno', delCart)
 });
 };
 
-  function itemDel(){
+  function itemDel(req,res){
      var itemNo = req.params.ITEMNO;
      console.log('itemNo: ' + itemNo);
      pool.getConnection(function(err,connection){
-     var query = "delete from items where itemno = ?";
-     connection.query(query, [itemNo], function(err,result){
-     res.redirect('../products');
-     connection.release();
+      var query = "delete from items where itemno = ?";
+      connection.query(query, [itemNo], function(err,result){
+      res.redirect('../products');
+      connection.release();
    });
  });
 };
@@ -248,7 +248,6 @@ router.get('/delCart/:itemno', delCart)
    //cart
    function toCart(req,res){
      var itemNo = req.params.itemno;
-     console.log('itemToCart:'+itemNo);
      pool.getConnection(function(err,connection){
        var query = "select * from items where itemno=?";
        connection.query(query,[itemNo],function(err,result){
