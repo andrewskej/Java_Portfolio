@@ -7,33 +7,41 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style type="text/css">
-	.star_rating {
-		font-size:0; letter-spacing:-4px;
-	}
-	.star_rating a {
-	    font-size:22px;
-	    letter-spacing:0;
-	    display:inline-block;
-	    margin-left:5px;
-	    color:#ccc;
-	    text-decoration:none;
-	}
-	.star_rating a:first-child {
-		margin-left:0;
-	}
-	.star_rating a.on {
-		color:#777;
-	}
-	#soldout{
-		color:red;
-	}
+	.star_rating { font-size:0; letter-spacing:-4px; }
+	.star_rating a { font-size:22px; letter-spacing:0; display:inline-block; margin-left:5px; color:#ccc; text-decoration:none; }
+	.star_rating a:first-child { margin-left:0; }
+	.star_rating a.on { color:#777; }
+	.reviewHere, .eachReview{border:solid 1px gray; margin-bottom:1%; list-style:none;}
+
+	#soldout{ color:red; }
+
 </style>
 <script type="text/javascript">
    $(document).ready(function(){
+	
+	$("#addReview").click(function(){
+        alert("Thank you!");
+	});
 
-	  $("#addReview").click(function(){
-          alert("Thank you!");
-      });
+	$('.reviewWrite').on('click', function(){
+		var reviewContent = $('#reviewContent').val();
+		var itemNo = $('.itemNo').text();
+		$.ajax({ //wip
+			type:'POST',
+			sync:false,
+			url:`http://localhost:3000/work/mall/addReview/`+itemNo,
+			data:{content:reviewContent},
+			success:function(data){
+				console.log('something\'s up')
+			}
+		})
+		reviewDomAdd()
+	})
+
+	function reviewDomAdd(){
+		//작성한 리뷰 Dom으로 즉시 붙이기
+	}
+
 
     $("#DelReview").click(function(){
         alert("Removed!");
@@ -51,20 +59,20 @@
      });
 
      $("#mQuantity").change(function(){
-				var price = <%=rows[0].ITEMPRICE%>
-				var mqty = $("#mQuantity option:selected").val();
-				var total = price * mqty;
-				$('#total').val(total);
+		var price = <%=rows[0].ITEMPRICE%>
+		var mqty = $("#mQuantity option:selected").val();
+		var total = price * mqty;
+		$('#total').val(total);
      });
 
      $('#modalPurchase').click(function(){
-  	  if($('#maddress').val() != "" &&   $('#mcardType').val() !="" &&
-  	  	 $('#mexpDate').val() !="" &&  $('#mcardNo').val() !="" &&  $('#total').val()!='0'){
-  	 	alert("Thank you for buying!!");
-  	  }else{
-  		alert("please fill out the form");
-  		return false;
-  	  }
+		if($('#maddress').val() != "" &&   $('#mcardType').val() !="" &&
+			$('#mexpDate').val() !="" &&  $('#mcardNo').val() !="" &&  $('#total').val()!='0'){
+  	 		alert("Thank you for buying!!");
+		}else{
+			alert("please fill out the form");
+			return false;
+		}
     });
 
    	$("#cartbuy").click(function(){
@@ -94,155 +102,146 @@
 	<% }%>
 
    <h1>Item Details</h1>
-   <nav class="navbar navbar-inverse">
-     <div class="container-fluid">
-       <div class="collapse navbar-collapse" id="myNavbar">
-				 <ul class="nav navbar-nav">
-           <li><a href="../../" class="glyphicon glyphicon-home"></a></li>
-           <li><a href="../../mall">Mall Main</a></li>
-           <li><a href="../../mall/products">All products</a></li>
-           <!-- <li><a href="../../mall/giftGuide">Gift Guide</a></li> -->
-         </ul>
-				 <ul class="nav navbar-nav navbar-right">
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="../../" class="glyphicon glyphicon-home"></a></li>
+					<li><a href="../../mall">Mall Main</a></li>
+					<li><a href="../../mall/products">All products</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
 					<%if(user && user.level != 'admin'){%>
-  						<li><a href="../../mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
-	 						<li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
-	 				<%}%>
-	 				<%if(user && user.level == 'admin') {%>
-	 						<li><a href="#"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
-	 						<li><a href="../../work/mall/mallAdmin"><span class="glyphicon glyphicon-warning-sign"></span>Admin Mode</a></li>
-	 				<%}%>
-			   </ul>
-       </div>
-     </div>
-   </nav>
+						<li><a href="../../mall/myShopping/<%=user.username%>"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
+						<li><a data-target="#modal1" data-toggle="modal"><span class="glyphicon glyphicon-shopping-cart">Cart</span></a></li>
+					<%}%>
+					<%if(user && user.level == 'admin') {%>
+						<li><a href="#"><span class="glyphicon glyphicon-user"></span><%=(user.username) %></a></li>
+						<li><a href="../../work/mall/mallAdmin"><span class="glyphicon glyphicon-warning-sign"></span>Admin Mode</a></li>
+					<%}%>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
 	 <!--   Cart -->
-	 	<div id="modal1" class="modal">
-	 		 <div class="modal-dialog lg">
-	 				<div class="modal-content">
-	 					 <div class="modal-header">
-	 							<button class="close" data-dismiss="modal">x</button>
-	 							<h4>My Cart: <%=user.username%></h4>
-	 					 </div>
+	<div id="modal1" class="modal">
+		<div class="modal-dialog lg">
+			<div class="modal-content">
 
-	 				<form action="cartPurchase" method="get">
-	 					 <div class="modal-body">
-	 							<% if(myCart.length==0){ %>
-	 									<h3>Your cart is Empty!</h3>
-	 							<% } %>
-	 							<%if(myCart){%>
-	 								<% for(var i=0;i<myCart.length;i++){ %>
-	 										<div class="row" style="float:left; width:33%; margin:auto;">
-	 											 <input type="checkbox" id="<%=myCart[i].ITEMNO%>" name="cartItems" value="<%=myCart[i].ITEMNO%>">
-	 											 <label for="<%=myCart[i].ITEMNO%>">itemNo: <%=myCart[i].ITEMNO%></label>
-	 											 <p>itemName: <%=myCart[i].ITEMNAME%></p>
-	 											 <p>Price($): <%=myCart[i].PRICE%></p>
-	 											 <p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
-	 											 <a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
-	 											 <p>----------------------------------------</p>
-	 										</div>
-									<% } %>
-								<% } %>
-	 					 <div class="modal-footer">
-	 						 <%if(myCart){%>
-	 							 <p> <%=myCart.length %> Item(s)</p>
-	 								<input type="submit" class="btn btn-success" id="cartbuy" value="checkout">
-	 							<%}%>
-	 					 </div>
-	 				 </div>
-	 				</form>
-	 			</div>
-	 		</div>
-	  </div>
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal">x</button>
+					<h4>My Cart: <%=user.username%></h4>
+				</div>
+
+				<form action="cartPurchase" method="get">
+					<div class="modal-body">
+						<% if(myCart.length==0){ %>
+							<h3>Your cart is Empty!</h3>
+						<% } %>
+						<%if(myCart){%>
+							<% for(var i=0;i<myCart.length;i++){ %>
+								<div class="row" style="float:left; width:33%; margin:auto;">
+									<input type="checkbox" id="<%=myCart[i].ITEMNO%>" name="cartItems" value="<%=myCart[i].ITEMNO%>">
+									<label for="<%=myCart[i].ITEMNO%>">itemNo: <%=myCart[i].ITEMNO%></label>
+									<p>itemName: <%=myCart[i].ITEMNAME%></p>
+									<p>Price($): <%=myCart[i].PRICE%></p>
+									<p name="quantity" value="quantity">Quantity: <%=myCart[i].QUANTITY%></p><span></span>
+									<a class="btn btn-danger" href="delCart.do?itemNo=${c.itemNo}">remove</a>
+									<p>----------------------------------------</p>
+								</div>
+							<% } %>
+						<% } %>
+					</div>
+					<div class="modal-footer">
+						<%if(myCart){%>
+							<p> <%=myCart.length %> Item(s)</p>
+							<input type="submit" class="btn btn-success" id="cartbuy" value="checkout">
+						<%}%>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
 	 <!-- cart ends -->
 
 
 
    <!-- item Detail -->
-    <table border="2" class="table">
-			<tr><td><p><b># <%=rows[0].ITEMNO%> . <%=rows[0].ITEMNAME%></b></p></td></tr>
-      <tr><td><p>Price:<b>$ <%=rows[0].ITEMPRICE%></b>,    in Stock: <%=rows[0].ITEMSTOCK%></p></td>
-			<tr><td><img src="/<%=rows[0].ITEMIMG%>" style = "width:600px;" /><br></td></tr>
-			<tr><td><p><%=rows[0].ITEMDESC%></p></td></tr>
-    </table>
+	<table border="2" class="table">
+		<div class="itemNo"><%=rows[0].ITEMNO%></div>
+		<tr>
+			<td> <p><b><%=rows[0].ITEMNAME%></b></p> </td>
+		</tr>
+		<tr>
+			<td> <p>Price:<b>$ <%=rows[0].ITEMPRICE%></b>,    in Stock: <%=rows[0].ITEMSTOCK%></p> </td>
+		<tr>
+			<td><img src="/<%=rows[0].ITEMIMG%>" style = "width:600px;" /><br></td>
+		</tr>
+		<tr>
+			<td> <p><%=rows[0].ITEMDESC%></p></td> </tr>
+	</table>
 		<% if(rows[0].ITEMSTOCK<=0){ %>
-	   	<h2 id="soldout">This item is currently sold out</h2>
+		   	<h2 id="soldout">This item is currently sold out</h2>
 		<% } %>
 	<!--    item Detail ends -->
 
 
     <!-- Write Review -->
-    <div>
-    <form action="../addReview/<%=rows[0].ITEMNO%>" method="post">
-            <p class="star_rating">
-                <a href="#" id="star1">★</a>
-                <input type="hidden" value="1"  >
-                <a href="#" id="star2">★</a>
-                <input type="hidden" value="2" >
-                <a href="#" id="star3">★</a>
-                <input type="hidden" value="3" >
-                <a href="#" id="star4">★</a>
-                <input type="hidden" value="4" >
-                <a href="#" id="star5">★</a>
-                <input type="hidden" value="5" >
-            </p>
-     	        <input type="hidden" name="stars" id="startNum" >
-					<%if(!user){%>
-				    <textarea rows="2" cols="50" id="reviewContent" name="reviewContent" placeholder="Please login to leave a review" disabled></textarea>
-					<%}%>
-					<%if(user && user.level != 'admin'){%>
-				    <textarea rows="2" cols="50" id="reviewContent" name="reviewContent" placeholder="Write your reivew on this item!" required></textarea>
-			    	<input id="addReview" class="btn btn-default" type="submit" value="submit">
-					<%}%>
-     </form>
-     <br>
-     </div>
-     <br>
-<!-- read reviews -->
-     <div id="accordion" class="panel-group">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h4 class="panel-title">
-                  <a data-parent="#accordion" href="#collapse1" data-toggle="collapse">Review ▼</a>
-               </h4>
-            </div>
-            <div id="collapse1" class="panel-collapse collapse">
-               <div id="reviewHere"></div>
-	               <div><br>
+	<div>
+		<!-- <form action="../addReview/<%=rows[0].ITEMNO%>" method="post"> -->
+			<p class="star_rating">
+				<a href="#" id="star1">★</a>
+				<input type="hidden" value="1"  >
+				<a href="#" id="star2">★</a>
+				<input type="hidden" value="2" >
+				<a href="#" id="star3">★</a>
+				<input type="hidden" value="3" >
+				<a href="#" id="star4">★</a>
+				<input type="hidden" value="4" >
+				<a href="#" id="star5">★</a>
+				<input type="hidden" value="5" >
+			</p>
+			<input type="hidden" name="stars" id="startNum" >
+			<textarea rows="2" cols="50" id="reviewContent" name="reviewContent" placeholder="Write your reivew on this item!" required></textarea>
+			<button class="reviewWrite">submit</button>
+			<!-- <input id="addReview" class="btn btn-default" type="submit" value="submit"> -->
+		<!-- </form> -->
+	</div>
 
-			<%for(var i=0;i<reviews.length;i++){%>
-					<%	var review = reviews[i];%>
-	          <p>  Writer:<%=review.RID%></p>
-            <!-- <p>Stars:
-               <c:if test="${r.star!=null}">
-                  <c:forEach var="s" begin="1" end="${r.star}">
-                  	    ★
-                  </c:forEach>
-               </c:if>
-               <c:if test="${r.star==null }">
-              		    ☆
-               </c:if>
-            </p> -->
-            <strong><p>  <%=review.CONTENT%></p></strong>
-            <p>  <%=review.REGDATE%></p>
-		<%if(review.RID == user.username || user.username =='admin'){%>
-  			<td><a href="../reviewEdit/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewEdit">Edit</button></a></td>
-        <td><a href="../reviewDel/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewDel">x</button></a></td>
-		<%}%>
-			<p>--------------------</p>
-				<%}%>
-	                  <br>
-	               </div>
-            </div>
-           </div>
-  	      <br>
-	   </div>
+	<!-- read reviews -->
+	<div id="accordion" class="panel-group">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-parent="#accordion" href="#collapse1" data-toggle="collapse">Review ▼</a>
+				</h4>
+			</div>
+			<div id="collapse1" class="panel-collapse collapse">
+				<div class="reviewHere">
+					<%for(var i=0;i<reviews.length;i++){%>
+						<li class="eachReview">
+							<%	var review = reviews[i];%>
+							<div class="eachReview__writer">Writer:<%=review.RID%></div>
+							<div class="eachReview__stars">Stars: </div> 
+							<div class="eachReview__content"><%=review.CONTENT%></div>
+							<div class="eachReview__date">  <%=review.REGDATE%></div>
+							<%if(review.RID == user.username || user.username =='admin'){%>
+								<td><a href="../reviewEdit/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewEdit">Edit</button></a></td>
+								<td><a href="../reviewDel/<%=review.REVIEWNO%>"><button class="btn btn-default" id="reviewDel">x</button></a></td>
+							<%}%>
+						</li>
+					<%}%>
+				</div>
+			</div>
+		</div>
+	</div>
    <!-- Review ends -->
 
 
- <!-- <form action="toCart" method="get"> -->
-	 <input type="hidden" name="ITEMNO" value="<%=rows[0].ITEMNO%>"/>
+ <form action="toCart" method="get">
+	   <input type="hidden" name="ITEMNO" value="<%=rows[0].ITEMNO%>"/>
 			<% if(rows[0].ITEMSTOCK<=0){ %>
 				<input type="button" class="btn btn-warning" value="sold out" disabled>
 			<% } %>
@@ -251,7 +250,7 @@
 				<a href="../toCart/<%=rows[0].ITEMNO%>" class="btn btn-danger" id="toCart" value="to Cart">to Cart</a>
 
 			<%}%>
- <!-- </form> -->
+ </form>
 			<% if(rows[0].ITEMSTOCK>0){ %>
 					<button data-target="#modal2" class="btn btn-success" data-toggle="modal">Buy Now</button>
 			<%}%>
@@ -259,70 +258,78 @@
 
 
 	<!-- Direct Purchase Modal -->
-         <div id="modal2" class="modal">
+		<div id="modal2" class="modal">
             <div class="modal-dialog modal-lg">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <h4>Purchase Confirmation - Direct Purchase</h4>
-                  </div>
+                <div class="modal-content">
+					<div class="modal-header">
+						<h4>Purchase Confirmation - Direct Purchase</h4>
+					</div>
 
-                  <form action="../itemPurchase/<%=rows[0].ITEMNO%>" method="post">
-	                  <div class="modal-body">
-											<table border="2" class="table table-strpied">
-												 <tr><td><h3>Item Info</h3></td></tr>
-				                  <tr><td><div>
-														<input type="hidden" name="itemName" value="<%=rows[0].ITEMNAME%>">
-														<input type="hidden" name="itemPrice" value="<%=rows[0].ITEMPRICE%>">
-				                     ItemNo: <span name="itemNo" value="<%=rows[0].ITEMNO%>"><%=rows[0].ITEMNO%></span><br>
-				                     ItemName: <span name="itemName" value="<%=rows[0].ITEMNAME%>"><%=rows[0].ITEMNAME%></span><br>
-				                     price: $ <span name="itemPrice" id="itemPrice" value="<%=rows[0].ITEMPRICE%>"><%=rows[0].ITEMPRICE%></span><br>
-				                  </div></td></tr>
-				                  <tr><td><p>Quantity:
-														 <select name="mQuantity" required id="mQuantity">
-															 <option selected disabled>select quantity
-																			<% for(var i=1; i<rows[0].ITEMSTOCK; i++){ %>
-																				<option name="quantity" ><%=i%>
-																				</option>
-																			<% } %>
-															 </option>
-			                       </select></p></div></td></tr>
-		 										  <tr><td><h3>Total: $<input type="text" name="total" id="total" value="0" disabled></h3></td></tr>
-								  		</table>
-	                  </div>
-
-	                  <div class="modal-body">
-											<table border="2" class="table table-striped">
-			                 <tr><td><h3>Buyer Info</h3></td></tr>
-											 <tr><td>
-													<%if(!user){ %>
-													 <span name="mid">Username: Guest</span>
-													<%}%>
-													<%if(user){ %>
-													 <span name="mid">Username: <%=user.username%></span>
-													<%}%>
-											 </tr></td>
-											 <tr><td>
-			                     <p><input type="text" name="address" id="maddress" required placeholder="address"></p>
-			                     <p><input type="text" name="cardNo" id="mcardNo" required placeholder="xxxx-xxxx-xxxx-xxxx"></p>
-			                     <p>CardType:  <select name="cardType" id="mcardType">
-			                        <option value="Master">Master</option>
-			                        <option value="VISA">VISA</option>
-			                        <option value="Other">Other</option>
-			                        </select></p>
-			                     <p><input type="text" name="expDate" id="mexpDate" required placeholder="MM/YY"></p>
-											 </td></tr>
+					<form action="../itemPurchase/<%=rows[0].ITEMNO%>" method="post">
+						<div class="modal-body">
+												<table border="2" class="table table-strpied">
+													<tr><td><h3>Item Info</h3></td></tr>
+									<tr><td><div>
+															<input type="hidden" name="itemName" value="<%=rows[0].ITEMNAME%>">
+															<input type="hidden" name="itemPrice" value="<%=rows[0].ITEMPRICE%>">
+										ItemNo: <span name="itemNo" value="<%=rows[0].ITEMNO%>"><%=rows[0].ITEMNO%></span><br>
+										ItemName: <span name="itemName" value="<%=rows[0].ITEMNAME%>"><%=rows[0].ITEMNAME%></span><br>
+										price: $ <span name="itemPrice" id="itemPrice" value="<%=rows[0].ITEMPRICE%>"><%=rows[0].ITEMPRICE%></span><br>
+									</div></td></tr>
+									<tr><td><p>Quantity:
+															<select name="mQuantity" required id="mQuantity">
+																<option selected disabled>select quantity
+																				<% for(var i=1; i<rows[0].ITEMSTOCK; i++){ %>
+																					<option name="quantity" ><%=i%>
+																					</option>
+																				<% } %>
+																</option>
+									</select></p></div></td></tr>
+													<tr><td><h3>Total: $<input type="text" name="total" id="total" value="0" disabled></h3></td></tr>
 											</table>
-										</div>
+						</div>
 
-	                  <div class="modal-footer">
-	                     <input type="submit" class="btn btn-success" id="modalPurchase" value="Purchase!">
-	                  </div>
-                </form>
-              </div>
-           </div>
-         </div>
+						<div class="modal-body">
+												<table border="2" class="table table-striped">
+								<tr><td><h3>Buyer Info</h3></td></tr>
+												<tr><td>
+														<%if(!user){ %>
+														<span name="mid">Username: Guest</span>
+														<%}%>
+														<%if(user){ %>
+														<span name="mid">Username: <%=user.username%></span>
+														<%}%>
+												</tr></td>
+												<tr><td>
+									<p><input type="text" name="address" id="maddress" required placeholder="address"></p>
+									<p><input type="text" name="cardNo" id="mcardNo" required placeholder="xxxx-xxxx-xxxx-xxxx"></p>
+									<p>CardType:  <select name="cardType" id="mcardType">
+										<option value="Master">Master</option>
+										<option value="VISA">VISA</option>
+										<option value="Other">Other</option>
+										</select></p>
+									<p><input type="text" name="expDate" id="mexpDate" required placeholder="MM/YY"></p>
+												</td></tr>
+												</table>
+											</div>
+
+						<div class="modal-footer">
+							<input type="submit" class="btn btn-success" id="modalPurchase" value="Purchase!">
+						</div>
+					</form>
+				  
+                </div>
+            </div>
+		</div>
     <!-- Purchase Modal ends-->
 
+
+
+
+
+
+
+ 
 </div>
 </body>
 </html>

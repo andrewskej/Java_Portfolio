@@ -17,8 +17,10 @@ router.get('/', mallSet)
 router.get(['/products/','/products/:page'], showProducts)
 router.get('/limited/', limitedOffer)
 router.get('/myShopping/:username', myShopping)
+
 router.get('/itemDetail/:itemNo', itemDetail)
 router.post('/itemPurchase/:itemno', itemPurchase)
+
 router.post('/addReview/:itemno', addReview)
 router.get('/reviewDel/:reviewno', reviewDel) 
 
@@ -34,20 +36,20 @@ router.get('/delCart/:itemno', delCart)
 
 
   function mallSet(req,res){
-    if(req.session.username){
+    if (req.session.username) {
       var user = {username:req.session.username,level:req.session.level};
         pool.getConnection(function(err,connection){
           var sql = `SELECT * FROM myCart WHERE cartname=?`
           var param = req.session.username;
           connection.query(sql,param,function(results){
-            if(results){
+            if (results) {
               results.forEach(function(item,i){
                 myCart.push(item);
               })
             }
             var query = 'select * from items order by ITEMDATE desc';
             connection.query(query,function(err,items){
-            res.render('../views/mall/mallMain',{user:user,myCart:myCart,items:items});
+              res.render('../views/mall/mallMain',{user:user,myCart:myCart,items:items});
             });
           });
         });
@@ -129,21 +131,19 @@ router.get('/delCart/:itemno', delCart)
     };
 
 //addreview - need to add stars
-  function addReview(req,res){
-    pool.getConnection(function(err,connection){
+  async function addReview(req,res){
       var itemNo = req.params.itemno;
       var rid = req.session.username;
-      var content = req.body.reviewContent;
+      var content = req.body.content; //for ajax
       var star;
       var query = 'insert into review (itemno, rid, content) values(?,?,?)';
-      connection.query(query,[itemNo,rid,content], function(err,result){
-        console.log('You\'ve left a review!' );
-        // res.redirect('/work/mall/itemDetail/'+itemNo);
-        res.redirect('back');
-      });
-    });
+      var params = [itemNo,rid,content];
+      var result = await pool.query(query,params);
+      console.log(result);
+      res.json(result)
   };
-  //addreview under construction
+ 
+
 
   function itemPurchase(req,res){
     pool.getConnection(function(err,connection){
