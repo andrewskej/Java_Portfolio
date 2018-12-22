@@ -10,9 +10,6 @@ module.exports = function(app,session,fs,path,multer,upload,bodyParser){
       database:'heroku_f42423e25f73df6'
   });
 
-
-var myCart=[],items=[];
-
 router.get('/', mallSet)
 router.get(['/products/','/products/:page'], showProducts)
 router.get('/limited/', limitedOffer)
@@ -32,7 +29,10 @@ router.get('/cartPurchase', cartPurchase)
 router.get('/toCart/:itemno', toCart)
 router.get('/delCart/:itemno', delCart)
 
-
+var myCart=[],items=[];
+// var username = req.session.username || 'guest';
+// var level = req.session.level || 'guest';
+// var user = {username:username, level:level};
 
 
   function mallSet(req,res){
@@ -53,10 +53,11 @@ router.get('/delCart/:itemno', delCart)
             });
           });
         });
-    }else{
+       }else{
       res.render('../views/mall/mallMain',{user:'guest',myCart:[],items:items||[]});
     }
   };
+
 
 
 
@@ -91,8 +92,10 @@ router.get('/delCart/:itemno', delCart)
     pool.getConnection(function(err,connection){
       var user = {username:req.session.username};
       // var query = 'select * from orderlist where orderlistname =?';
-      var query = 'select * from orderlist inner join items on orderlist.ITEMNO = items.ITEMNO '+
-      'where orderlist.orderlistname = ?';
+      var query = `SELECT * FROM orderlist 
+                   INNER JOIN items 
+                   ON orderlist.ITEMNO = items.ITEMNO 
+                   WHERE orderlist.orderlistname = ?`;
       connection.query(query,[user.username],function(err,results){
       console.log(results);
         res.render('../views/mall/myShopping',{user:user,results:results});
@@ -112,6 +115,7 @@ router.get('/delCart/:itemno', delCart)
         connection.query(query2,[itemNo],function(err,reviews){
           if(err) console.log(err);
           var myCart = [];
+
             if(req.session.username){
               var user ={username:req.session.username,level:req.session.level};
                   pool.getConnection(function(err,connection){
@@ -125,6 +129,7 @@ router.get('/delCart/:itemno', delCart)
             }else{
             res.render('../views/mall/itemDetail',{rows:rows,row:rows[0],reviews:reviews,user:'guest',myCart:myCart});
             }
+
           });
         });
       });
@@ -216,21 +221,22 @@ router.get('/delCart/:itemno', delCart)
           form.parse(req,function(err,fields,files){
           console.log('fields: '+JSON.stringify(fields));
           console.log('files: '+JSON.stringify(files));
-            var itemName = fields.itemName;
-            console.log('ITEMNAME: '+itemName);
-            var itemPrice = fields.itemPrice;
-            var itemStock = fields.itemStock;
-            var itemDesc = fields.itemDesc;
-            var itemImg = files.itemImg.path;
+          var itemName = fields.itemName;
+          var itemPrice = fields.itemPrice;
+          var itemStock = fields.itemStock;
+          var itemDesc = fields.itemDesc;
+          var itemImg = files.itemImg.path;
+          console.log('ITEMNAME: '+itemName);
+
       var query = "insert into items (ITEMNAME,ITEMPRICE,ITEMSTOCK,ITEMIMG,ITEMDESC) values (?,?,?,?,?)";
       connection.query(query,[itemName,itemPrice,itemStock,itemImg,itemDesc],function(err,result){
         if(err)console.log(err);
         res.redirect('../mall/mallAdmin');
       connection.release();
+        });
+      });
     });
-  });
-});
-};
+  };
 
   function itemDel(req,res){
      var itemNo = req.params.ITEMNO;
@@ -240,13 +246,13 @@ router.get('/delCart/:itemno', delCart)
       connection.query(query, [itemNo], function(err,result){
       res.redirect('../products');
       connection.release();
-   });
- });
-};
+      });
+    });
+  };
 
 
    //cart
-   function toCart(req,res){
+  function toCart(req,res){
      var itemNo = req.params.itemno;
      pool.getConnection(function(err,connection){
        var query = "select * from items where itemno=?";
@@ -274,31 +280,31 @@ router.get('/delCart/:itemno', delCart)
        res.redirect('../products');
      });
    });
- };
+  };
 
 
   function delCart(req,res){
-     var itemNo = req.params.itemno;
-     console.log("CartItemDel: " +itemNo);
-     pool.getConnection(function(err,connection){
-       var query = "delete from myCart where ITEMNO = ?";
-       connection.query(query, [itemNo], function(err,result){
-       });
-       alert('item removed from My Cart');
-       connection.release();
-       res.redirect('../products');
-     });
-   };
+    var itemNo = req.params.itemno;
+    console.log("CartItemDel: " +itemNo);
+    pool.getConnection(function(err,connection){
+      var query = "delete from myCart where ITEMNO = ?";
+      connection.query(query, [itemNo], function(err,result){
+      });
+      alert('item removed from My Cart');
+      connection.release();
+      res.redirect('../products');
+    });
+  };
 
 
-    function cartPurchase(){
-       var items = [];
-       items = req.body.checked;
-       console.log(items);
+  function cartPurchase(){
+      var items = [];
+      items = req.body.checked;
+      console.log(items);
 
-      //  for(var i=0; i<items.size; i++){
-      //  console.log(items[i])
-      // }
+    //  for(var i=0; i<items.size; i++){
+    //  console.log(items[i])
+    // }
   };
 
 

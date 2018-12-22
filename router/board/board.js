@@ -27,40 +27,26 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
 
 
   function boardMain(req,res,next){
-     var page;
-     if(req.params.page){
-      page = req.params.page;
-     }else{
-      page=1;
-     }
-     console.log("loading "+page+" page...");
-     pool.getConnection(function (err, connection) {
+    var page = req.params.page || 1;
+    pool.getConnection(function (err, connection) {
       connection.query('SELECT * FROM board order by idx desc', function (err, rows) {
-          if (err) console.error("err : " + err);
-          if(req.session.username){
-            var user = {username:req.session.username,
-                        level:req.session.level };
-            }else{
-                user={username:null};
-            }
-          res.render('../views/board/list', {title: 'Free', rows: rows, page:page, total:Object.keys(rows).length-1, each_page:10, user:user});
-          connection.release();
-          });
-       });
-   };
+          
+        var username = req.session.username || 'guest';
+        var level = req.session.level || 'guest';
+        var user = {username:username, level:level};
+        res.render('../views/board/list', {title: 'Free', rows: rows, page:page, total:Object.keys(rows).length-1, each_page:10, user:user});
+
+        connection.release();
+      });
+    });
+  };
 
 
 
  function writePage(req,res){
-     if(req.session.username){
-       var username = req.session.username;
-       var level = req.session.level;
-     }else{
-       username = null;
-       level = null;
-     }
-     console.log(username,level);
-     res.render('../views/board/write',{username:username,level:level});
+    var username = req.session.username || 'guest';
+    var level = req.session.level || 'guest';
+    res.render('../views/board/write',{username:username,level:level});
    };
 
 
@@ -78,9 +64,9 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
           if(req.session.username){
             writer = req.session.username;
             level = req.session.level;
-          }else{
-            writer = fields.writer;
-            level = "";
+          }else{  //can't write without login now.. need improvement on this
+            writer = "guest";
+            level = "guest";
           }
           if(files.imgsrc.name){
             imgsrc = files.imgsrc.path;  //or name//

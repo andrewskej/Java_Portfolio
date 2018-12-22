@@ -11,14 +11,14 @@
 	.star_rating a { font-size:22px; letter-spacing:0; display:inline-block; margin-left:5px; color:#ccc; text-decoration:none; }
 	.star_rating a:first-child { margin-left:0; }
 	.star_rating a.on { color:#777; }
-	.reviewHere, .eachReview{border:solid 1px gray; margin-bottom:1%; list-style:none;}
+	.itemDetail, .itemDetail img{border:solid 1px gray;}
+	.reviewHere, .eachReview{border:solid 1px gray; list-style:none;}
 
 	#soldout{ color:red; }
 
 </style>
 <script type="text/javascript">
-   $(document).ready(function(){
-	
+$(function(){
 	$("#addReview").click(function(){
         alert("Thank you!");
 	});
@@ -38,9 +38,7 @@
 		reviewDomAdd()
 	})
 
-	function reviewDomAdd(){
-		//작성한 리뷰 Dom으로 즉시 붙이기
-	}
+
 
 
     $("#DelReview").click(function(){
@@ -59,7 +57,7 @@
      });
 
      $("#mQuantity").change(function(){
-		var price = <%=rows[0].ITEMPRICE%>
+		var price = <%=rows[0].ITEMPRICE%>;
 		var mqty = $("#mQuantity option:selected").val();
 		var total = price * mqty;
 		$('#total').val(total);
@@ -83,8 +81,12 @@
 		}
 	});
 
-
+	
 });
+	function reviewDomAdd(){
+		//작성한 리뷰 Dom으로 즉시 붙이기
+		console.log('reviewDomAdd')
+	}
 </script>
 </head>
 <title>Item Detail Page</title>
@@ -101,7 +103,7 @@
 		<h3>Logging in allows you to use cart</h3>
 	<% }%>
 
-   <h1>Item Details</h1>
+    <h1>Item Details</h1>
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="collapse navbar-collapse" id="myNavbar">
@@ -167,25 +169,18 @@
 	 <!-- cart ends -->
 
 
-
-   <!-- item Detail -->
-	<table border="2" class="table">
+    <!-- item Detail -->
+	<section class="itemDetail">
 		<div class="itemNo"><%=rows[0].ITEMNO%></div>
-		<tr>
-			<td> <p><b><%=rows[0].ITEMNAME%></b></p> </td>
-		</tr>
-		<tr>
-			<td> <p>Price:<b>$ <%=rows[0].ITEMPRICE%></b>,    in Stock: <%=rows[0].ITEMSTOCK%></p> </td>
-		<tr>
-			<td><img src="/<%=rows[0].ITEMIMG%>" style = "width:600px;" /><br></td>
-		</tr>
-		<tr>
-			<td> <p><%=rows[0].ITEMDESC%></p></td> </tr>
-	</table>
+		<div class="itemName"><b><%=rows[0].ITEMNAME%></b></div>
+		<div class="itemPrice">Price:<b>$ <%=rows[0].ITEMPRICE%></b>,    in Stock: <%=rows[0].ITEMSTOCK%>
+		<div><img src="/<%=rows[0].ITEMIMG%>" style = "width:600px;" /><br></div>
+		<div><%=rows[0].ITEMDESC%></div>
+	</section>
 		<% if(rows[0].ITEMSTOCK<=0){ %>
 		   	<h2 id="soldout">This item is currently sold out</h2>
 		<% } %>
-	<!--    item Detail ends -->
+	<!-- item Detail ends -->
 
 
     <!-- Write Review -->

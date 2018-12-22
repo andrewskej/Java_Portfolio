@@ -60,6 +60,7 @@ var chat = require('./router/chat/chat')(app,session,io,http,bodyParser);
 // var mail = require('./router/mail')(app);
 
 
+
 app.use('/', require('./router/index')(app))
 app.use('/auth/',auth);
 app.use('/work/board/',board);
