@@ -76,18 +76,19 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
          var content = fields.content;
          var lang = fields.lang;
          //zh-CN, zh-TW, en, ja, ko
-         googleTranslate.translate(content,lang,function(err,translation){
-         var contentTR = translation.translatedText;
-         console.log('lang:'+lang);
+        //  googleTranslate.translate(content,lang,function(err,translation){
+          // console.log('tr:::', translation)
+          // var contentTR = translation.translatedText;
+          var contentTR = ''
           var query='INSERT into board (writer,title,content,contentTR,imgsrc) values(?,?,?,?,?)';
 
-          connection.query(query,[writer,title,content,contentTR,imgsrc],function(err,rows){
-          if(err)console.log(err);
-          res.redirect('/work/board/');
-          connection.release();
+            connection.query(query,[writer,title,content,contentTR,imgsrc],function(err,rows){
+            if(err)console.log(err);
+            res.redirect('/work/board/');
+            connection.release();
           });
         });
-      });
+      // });
    });
   };
 
