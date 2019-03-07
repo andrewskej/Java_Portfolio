@@ -1,7 +1,7 @@
 module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,bodyParser){
   var router = require('express').Router();
   var mysql = require('mysql');
-  var googleTranslate = require('google-translate')('AIzaSyCrGa9ekWOTGSlQqtCO9tL_Un_K2N-09Ak');
+  // var googleTranslate = require('google-translate')('AIzaSyCrGa9ekWOTGSlQqtCO9tL_Un_K2N-09Ak');
 
   var formidable = require('formidable');
   var pool = mysql.createPool({
@@ -13,16 +13,29 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
       migrate:'safe'
   });
   
+  //old functions.. most of them will be gone once the API & react is done
   router.get(['/','/page/:page'],boardMain)
+  
   router.get('/write', writePage)
   router.post('/write',writePost)
+  
   router.get('/read/:idx',read)
   router.post('/search',search)
+
   router.get('/edit/:idx', editPage)
   router.post('/edit/',editPost)
   router.post('/del/',del)
+  
   router.post('/comment/:idx', commentWrite)
   router.get('/commentDel/:cmtNo',commentDel)
+
+  
+  //API
+  router.get('/getAllThreads',getAllThreads)
+  router.get('/getThread/:idx', getThread)
+  router.get('/getComments/:cmtBrd', getComments)
+
+
   
 
 
@@ -30,16 +43,43 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
     var page = req.params.page || 1;
     pool.getConnection(function (err, connection) {
       connection.query('SELECT * FROM board order by idx desc', function (err, rows) {
-          
         var username = req.session.username || 'guest';
         var level = req.session.level || 'guest';
         var user = {username:username, level:level};
         res.render('../views/board/list', {title: 'Free', rows: rows, page:page, total:Object.keys(rows).length-1, each_page:10, user:user});
-
-        connection.release();
       });
     });
   };
+
+
+  //readAll API
+  function getAllThreads(req,res){
+    const query = `SELECT * from board order by idx desc`
+    pool.query(query, (err,result)=>{
+      if(err) console.log(err)
+      res.send(result)
+    })
+  }
+
+  //read API
+  function getThread(req,res){
+    const query = `SELECT * FROM board WHERE idx=?`
+    const param = req.params.idx;
+    pool.query(query, param, (err,result)=>{
+      if(err) console.log(err)
+      res.send(result)
+    })
+  }
+
+  //comment API
+  function getComments(req,res){
+    const query = `SELECT * from comments where cmtBrd=? order by cmtDate desc`
+    const param = req.params.cmtBrd
+    pool.query(query, param, (err, result)=>{
+      if(err) console.log(err)
+      res.send(result)
+    })
+  }
 
 
 
@@ -198,22 +238,19 @@ function read(req,res){
        var cmtWriter = req.session.username;
        var cmt = req.body.cmt;
        var cmtlang = req.body.cmtlang;
-       console.log('cmtWriter:'+cmtWriter);
-       console.log('cmt:'+cmt)
-       console.log('cmtLang: '+cmtlang);
 
-       googleTranslate.translate(cmt,cmtlang,function(err,translation){
-       var cmtTR = translation.translatedText;
+      //  googleTranslate.translate(cmt,cmtlang,function(err,translation){
+      //  var cmtTR = translation.translatedText;
 
        var query = 'insert into comments (cmtBrd,cmtWriter,cmt,cmtTR) values(?,?,?,?)';
-       connection.query(query,[cmtBrd,cmtWriter,cmt,cmtTR],function(err,result){
+       connection.query(query,[cmtBrd,cmtWriter,cmt,''],function(err,result){
          console.log('You\'ve left a comment!');
          res.redirect('/work/board/read/'+idx);
          connection.release();
        })
      })
 
-     })
+    //  })
    }
 
    function commentDel(req,res){

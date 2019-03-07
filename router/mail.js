@@ -4,12 +4,9 @@ var smtpPool = require('nodemailer-smtp-pool');
 var smtpTransport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user:'andrewskej',
-    pass:'wjsdbgtlr2017!'
   }
 });
 
-console.log('Mailer runs...at least');
   var mailOptions = {
     from: 'testAcct@text.works',
     to: 'andrewskej@gmail.com',

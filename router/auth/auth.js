@@ -11,7 +11,6 @@ module.exports = function(app,session,bodyParser){
   });
 
   route.get('/register',function(req,res){
-    console.log('register');
     res.render('auth/register');
   })
 

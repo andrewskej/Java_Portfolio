@@ -10,6 +10,9 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('./config/mySQL');
 var favicon = require('serve-favicon');
+var cors = require('cors')
+
+app.use(cors())
 
 app.use(session({
    secret:'laksjdnflkasjdn',
