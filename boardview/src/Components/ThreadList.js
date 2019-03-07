@@ -21,7 +21,6 @@ export default class ThreadList extends Component {
     }
 
 
-
     
 
     render() {
@@ -36,7 +35,7 @@ export default class ThreadList extends Component {
                         writer={el.writer} 
                         title={el.title} 
                         hit={el.hit} 
-                        regDate={el.regdate} />
+                        regDate={String(el.regdate).split('T')[0]} />
             )}      
         </div>
         )

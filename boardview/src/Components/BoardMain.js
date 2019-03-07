@@ -13,9 +13,9 @@ export default class BoardMain extends Component {
             boardmain
                 {/* title */}
                 {/* username,level */}
+                {/* write */}
                 <ThreadList/>
                 {/* searchinput */}
-                {/* write */}
                 {/* no page but infinitescroll? */}
             </div>
         )

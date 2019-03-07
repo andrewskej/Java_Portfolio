@@ -29,7 +29,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
   router.post('/comment/:idx', commentWrite)
   router.get('/commentDel/:cmtNo',commentDel)
 
-  
+
   //API
   router.get('/getAllThreads',getAllThreads)
   router.get('/getThread/:idx', getThread)
