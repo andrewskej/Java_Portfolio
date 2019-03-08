@@ -28,6 +28,7 @@ export default class ThreadList extends Component {
 
         return (
         <div className="threadList" style={{border:'solid 1px lightsteeblue', padding:'5%'}}>
+            <div>ThreadTop</div>
             {
                 allThreads.map((el,i) => 
                 <Thread key={i} 
