@@ -42,11 +42,11 @@ export default class Thread extends Component {
         return (
         <div className="oneThread" style={{display:'flex', flexDirection:"column"}}>
             <div className="threadNav" style={{display:'flex', border:'solid 1px black'}} onClick={(e)=>this.openOneThread(e.target)}>
-                <div className="seq" style={{display:'flex', flex:1, borderRight:'solid 1px black', padding:'1%'}}>{this.props.seq}</div>
-                <div className="writer" style={{display:'flex', flex:2, borderRight:'solid 1px black', padding:'1%'}}>{this.props.writer}</div>
-                <div className="title" style={{display:'flex',flex:6, borderRight:'solid 1px black', padding:'1%'}}>{this.props.title}</div>
-                <div className="hit" style={{display:'flex',flex:1, borderRight:'solid 1px black', padding:'1%'}}>{this.props.hit}</div>
-                <div className="regDate" style={{display:'flex',flex:2, padding:'1%'}}>{this.props.regDate}</div>
+                <div className="seq" style={{flex:1, borderRight:'solid 1px black', padding:'1%'}}>{this.props.seq}</div>
+                <div className="writer" style={{flex:2, borderRight:'solid 1px black', padding:'1%'}}>{this.props.writer}</div>
+                <div className="title" style={{flex:6, borderRight:'solid 1px black', padding:'1%'}}>{this.props.title}</div>
+                <div className="hit" style={{flex:1, borderRight:'solid 1px black', padding:'1%'}}>{this.props.hit}</div>
+                <div className="regDate" style={{flex:2, padding:'1%'}}>{this.props.regDate}</div>
             </div>
             {
                 currentThread!=='' && <ThreadContent openThread={openThread}/>
