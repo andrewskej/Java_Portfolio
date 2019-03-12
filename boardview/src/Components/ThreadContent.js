@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Comments from './Comments'
 export default class ThreadContent extends Component {
 
     state={
@@ -46,12 +47,7 @@ export default class ThreadContent extends Component {
                 
                 {comments!=='' && 
                     comments.map((cmt,i) => 
-                    <div className="comment" key={i}>
-                        <div> {cmt.cmtNo} </div>
-                        <div> {cmt.cmt} </div>
-                        <div> {cmt.cmtWriter} </div>
-                        <div> {cmt.cmtDate} </div>
-                    </div>
+                    <Comments key={i} cmt={cmt}/>
                 )}
 
 
