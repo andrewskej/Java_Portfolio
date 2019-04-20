@@ -16,10 +16,10 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
   //old functions.. most of them will be gone once the API & react is done
   router.get(['/','/page/:page'],boardMain)
   
-  router.get('/write', writePage)
-  router.post('/write',writePost)
+  // router.get('/write', writePage)
+  // router.post('/write',writePost)
   
-  router.get('/read/:idx',read)
+  // router.get('/read/:idx',read)
   router.post('/search',search)
 
   router.get('/edit/:idx', editPage)
@@ -34,7 +34,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
   router.get('/getAllThreads',getAllThreads)
   router.get('/getThread/:idx', getThread)
   router.get('/getComments/:cmtBrd', getComments)
-
+  router.post('/write',write)
 
   
 
@@ -81,13 +81,20 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
     })
   }
 
+  // write API
+  function write(req,res){
+    const {newThread} = req.body;
+    const params = newThread;
+    const query='INSERT into board (writer,title,content,contentTR,imgsrc) values(?,?,?,?,?)';
+
+  }
 
 
- function writePage(req,res){
-    var username = req.session.username || 'guest';
-    var level = req.session.level || 'guest';
-    res.render('../views/board/write',{username:username,level:level});
-   };
+//  function writePage(req,res){
+//     var username = req.session.username || 'guest';
+//     var level = req.session.level || 'guest';
+//     res.render('../views/board/write',{username:username,level:level});
+//   };
 
 
  function writePost(req,res){
@@ -114,7 +121,7 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
             imgsrc = "";
          }
          var content = fields.content;
-         var lang = fields.lang;
+        //  var lang = fields.lang;
          //zh-CN, zh-TW, en, ja, ko
         //  googleTranslate.translate(content,lang,function(err,translation){
           // console.log('tr:::', translation)
@@ -134,26 +141,26 @@ module.exports = function(app,multer,upload,session,route,fs,path,multer,upload,
 
 
 
-function read(req,res){
-  pool.getConnection(function(err,connection){
-  var idx = req.params.idx;
-  hitUp(idx);
-  if(req.session.username){
-    var user = {username: req.session.username, level:req.session.level}
-  }else{
-    user = {username: null,level:null}
-  }
+// function read(req,res){
+//   pool.getConnection(function(err,connection){
+//   var idx = req.params.idx;
+//   hitUp(idx);
+//   if(req.session.username){
+//     var user = {username: req.session.username, level:req.session.level}
+//   }else{
+//     user = {username: null,level:null}
+//   }
 
-  var query1 = 'SELECT * from comments where cmtBrd=? order by cmtDate desc'
-  connection.query(query1,[idx],function(err,results){
-    var query2 = 'SELECT * from board WHERE idx=?'
-    connection.query(query2,[idx], function(err,rows){
-      res.render('../views/board/read',{image:rows[0].imgsrc,rows:rows,user:user,results:results});
-        });
-      });
-      connection.release();
-    });
- };
+//   var query1 = 'SELECT * from comments where cmtBrd=? order by cmtDate desc'
+//   connection.query(query1,[idx],function(err,results){
+//     var query2 = 'SELECT * from board WHERE idx=?'
+//     connection.query(query2,[idx], function(err,rows){
+//       res.render('../views/board/read',{image:rows[0].imgsrc,rows:rows,user:user,results:results});
+//         });
+//       });
+//       connection.release();
+//     });
+//  };
 
   function hitUp(idx){
       pool.getConnection(function(err,connection){
@@ -162,7 +169,7 @@ function read(req,res){
        connection.query(query2,[idx],function(err,connection){});
        connection.release();
         });
-    };
+  };
 
 
   function search(req,res){

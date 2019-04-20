@@ -7,9 +7,11 @@ export default class ThreadContent extends Component {
         comments:[]
     }
 
+    
     componentDidMount(){
         this.getComments(this.props.openThread.idx)
     }
+
 
     getComments = async (seq) => {
         const comments = await axios.get('//localhost:3000/work/board/getComments/'+seq)
@@ -47,7 +49,7 @@ export default class ThreadContent extends Component {
                 
                 {comments!=='' && 
                     comments.map((cmt,i) => 
-                    <Comments key={i} cmt={cmt}/>
+                        <Comments key={i} cmt={cmt}/>
                 )}
 
 
